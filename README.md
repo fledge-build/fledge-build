@@ -47,22 +47,11 @@ The skill is installed automatically via `postinstall` and available to agents i
 
 ## Skill design principles
 
-### One skill per package
+Skills are scoped by technology, not by cross-cutting concern. Each package provides exactly one self-contained skill. The skill encodes principles (non-negotiable conventions), recommends patterns (defaults for common problems), and defers to the project for implementation details (file structure, existing abstractions). Project patterns take precedence over skill recommendations when both exist.
 
-Each package provides exactly one skill. A skill maps to one distinct task type. Agents select a single skill per task based on its description, so every skill must be self-contained: it should carry all the knowledge agents need to complete the task, without relying on another skill being loaded alongside it.
+The core of a skill is its decision tree: a step-by-step flow that walks the agent through the task, branching on real decisions and leading to focused reference files. Rules tell the agent what is correct; the decision tree tells the agent how to get there.
 
-A useful test: if you can write a clear, non-overlapping description for a skill, the scope is right. If two skills would both match the same task, or if a task requires knowledge from two separate skills to be done correctly, the split is wrong.
-
-### Structure
-
-A skill is an entry point (`SKILL.md`) that orients agents, backed by referenced files for depth. The entry point should cover:
-
-- **What the task is** -- frames what the agent is about to do
-- **What rules apply** -- the constraints and conventions
-- **What good looks like** -- concrete examples of correct output
-- **How to make decisions** -- guidance through the key decision points the agent will encounter, so the outcome is consistent rather than left to inference
-
-The last point is the most important. Rules tell the agent what is correct; decision guidance tells the agent how to get there. A skill that only lists rules leaves too much to interpretation.
+See [docs/skill-design.md](docs/skill-design.md) for the full guide on scoping, the three-layer model, decision tree design, and a worked example using `@fledge/vue`.
 
 ## Releases
 
