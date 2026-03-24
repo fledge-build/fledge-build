@@ -35,7 +35,7 @@ packages/vue/
 
 ## Status
 
-Early stage. The focus right now is on `@fledge/vue` as the first skill package, to establish what works well before expanding to other technologies.
+Early stage. The focus right now is on `@fledge/vue` as the first skill package, to establish what works well before expanding to other technologies. See [ROADMAP.md](ROADMAP.md) for the full strategy and planned phases.
 
 ## Using in a project
 
@@ -103,11 +103,11 @@ Packages are scoped by technology or domain. Everything Vue-related lives in `@f
 1. Create a new directory under `packages/`
 2. Add a `package.json` with `@fledge/cli` as a dependency and `"postinstall": "fledge install-skill"`
 3. Add a `skill/` directory with at minimum a `SKILL.md`
-4. Add a corresponding playground under `playgrounds/` with a `CLAUDE.md`
+4. Add a corresponding playground under `playgrounds/` with agent configuration (e.g., `CLAUDE.md` or `AGENTS.md`)
 
 ## Development
 
-Each skill package has a corresponding playground under `playgrounds/`. A playground is a minimal app that mirrors a real consuming project, with the skill package linked as a workspace dependency. Each playground has a `CLAUDE.md` that tells Claude to treat it as an isolated project.
+Each skill package has a corresponding playground under `playgrounds/`. A playground is a minimal app that mirrors a real consuming project, with the skill package linked as a workspace dependency. Each playground has agent configuration that scopes it as an isolated project.
 
 The playground is the primary environment for iterating on skills: open Claude from the playground directory, give it a realistic task, observe the output, and refine the skill content based on what you learn.
 
@@ -115,4 +115,4 @@ To sync the latest skill changes into the playground:
 
 1. Edit skill files under `packages/<package>/skill/`
 2. Run `pnpm install` from the **playground directory** (e.g. `playgrounds/vue`) to trigger the postinstall and sync skill files
-3. Open Claude Code from the **playground directory**. Skills are picked up automatically
+3. Open your agent from the **playground directory**. Skills are picked up automatically

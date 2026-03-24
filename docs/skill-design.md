@@ -67,7 +67,7 @@ Examples of project conventions:
 
 The skill should instruct the agent to look for and follow project conventions where they exist. A simple pattern: include a step in the skill's decision flow that says "check for project-level conventions before proceeding."
 
-The mechanism for project conventions is whatever the team already uses: `CLAUDE.md`, a `conventions/` directory, inline comments, or existing code patterns. The skill does not prescribe the format, it just tells the agent to look.
+The mechanism for project conventions is whatever the team already uses: agent configuration files, a `conventions/` directory, inline comments, or existing code patterns. The skill does not prescribe the format, it just tells the agent to look.
 
 ## Skill structure
 
@@ -130,4 +130,4 @@ The `fledge install-skill` command currently installs skills from npm packages v
 
 ### Composition across skills
 
-For full-stack feature implementation, a project may have multiple skills installed (e.g., `@fledge/vue` and a future `@fledge/api`). While each skill is self-contained per task, the project's CLAUDE.md or conventions could document which skills are relevant for which scenarios, helping engineers (and agents) understand the full picture.
+For full-stack feature implementation, a project may have multiple skills installed (e.g., `@fledge/vue` and a future `@fledge/api`). While each skill is self-contained per task, the project's agent configuration or conventions could document which skills are relevant for which scenarios, helping engineers (and agents) understand the full picture.
