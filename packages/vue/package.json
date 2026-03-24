@@ -1,0 +1,28 @@
+{
+  "name": "@fledge/vue",
+  "type": "module",
+  "version": "0.1.0",
+  "author": "René Schapka",
+  "license": "MIT",
+  "files": [
+    "skill"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "postinstall": "fledge install-skill",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --fix"
+  },
+  "dependencies": {
+    "@fledge/cli": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

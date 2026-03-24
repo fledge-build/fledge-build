@@ -1,0 +1,32 @@
+{
+  "name": "@fledge/cli",
+  "type": "module",
+  "version": "0.1.0",
+  "author": "René Schapka",
+  "license": "MIT",
+  "bin": {
+    "fledge": "./bin/fledge.js"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --fix",
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "citty": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}
