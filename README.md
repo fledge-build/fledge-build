@@ -1,6 +1,6 @@
 # Fledge
 
-Technology skills and project knowledge for AI-assisted development. Pairs with [OpenSpec](https://openspec.dev/) for the full workflow: OpenSpec handles the "what" (specs, design, tasks), Fledge handles the "how" (technology-specific conventions, project context, implementation guidance).
+AI-native development workflow toolset. Feature-driven design, technology skills, and project knowledge in one coherent system.
 
 ## Why this exists
 
