@@ -1,6 +1,6 @@
 # Fledge
 
-Agent-powered development workflows. From spec to implementation: scaffolding, spec-driven design, and stack-aware agent tooling in one coherent system.
+Technology skills and project knowledge for AI-assisted development. Pairs with [OpenSpec](https://openspec.dev/) for the full workflow: OpenSpec handles the "what" (specs, design, tasks), Fledge handles the "how" (technology-specific conventions, project context, implementation guidance).
 
 ## Why this exists
 
