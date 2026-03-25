@@ -93,9 +93,13 @@ The feature-driven workflow. Provides the structure for moving from idea to impl
 
 ### Phase 3: Project initialization
 
-An initialization skill that prepares a project for the Fledge workflow. The agent discovers the project's codebase and produces structured project knowledge that the workflow and technology skills consume.
+Prepares a project for the Fledge workflow. Likely involves two concerns that may be separate steps or combined:
 
-- [ ] Initialization as a skill (agent-driven discovery, not a CLI scaffold)
+- **Mechanical setup** -- which technology skills to install, project structure, initial configuration. This may be a CLI command (`fledge init`), similar to how other tools handle interactive project setup.
+- **Project knowledge discovery** -- understanding the existing codebase: data models, domain concepts, API conventions, existing patterns. This likely needs agent intelligence and may be better served by a skill.
+
+The right split will become clearer during implementation. Key deliverables regardless of approach:
+
 - [ ] Discover and register project knowledge sources (data models, domain glossary, API conventions)
 - [ ] Connect installed technology skills to project context
 - [ ] Establish the project knowledge structure so it can be maintained as the project evolves
