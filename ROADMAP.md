@@ -21,7 +21,8 @@ These principles guide what Fledge builds and how:
 - **Progressive adoption.** Every package delivers standalone value. Technology skills work without the workflow layer. The full workflow emerges naturally as more pieces are adopted.
 - **Technology-aware, not technology-agnostic.** Generic tools produce generic results. Fledge ships opinionated, technology-specific skills that guide agents through implementation decisions.
 - **Fluid, not linear.** The workflow supports exploration, iteration, and revision. Feature briefs can be refined during implementation. Rigid phase gates do not reflect how real work happens.
-- **No runtime.** No daemon, no server, no proprietary format. Everything is files the agent reads and conventions the agent follows.
+- **Human-in-the-loop, not human-at-the-end.** The agent drives the conversation, but the human makes the decisions. Workflow skills are interactive: they ask questions, propose options, and wait for direction. Because all artifacts are plain files, the human can also edit outside the agent conversation at any time. The agent assists; the human owns the outcome. To keep this efficient, the agent should make obvious decisions autonomously and present remaining choices as specific options rather than open-ended questions.
+- **No runtime.** No daemon, no server, no proprietary format. Everything is files the agent reads and conventions the agent follows. The CLI has no dependency on agent capabilities.
 - **Design over implementation time.** Spending more time on design and specification makes implementation straightforward for agents.
 
 ## The workflow
@@ -51,6 +52,62 @@ Project knowledge (living, maintained)       Feature briefs (per feature, archiv
                                              └── recipe-sharing/
                                                  └── ...
 ```
+
+## Package architecture
+
+Two types of packages, one clear boundary: the CLI handles mechanical operations (files, directories, scaffolding), skills handle tasks that require understanding and judgment (writing briefs, exploring code, verifying implementation).
+
+```
+packages/
+  cli/                  @fledge/cli         CLI binary, devDependency or global
+  workflow/             @fledge/workflow     Multiple workflow skills
+    skills/
+      brief/            fledge-brief        Feature brief lifecycle
+      explore/          fledge-explore      Codebase exploration
+      verify/           fledge-verify       Brief + convention compliance
+  vue/                  @fledge/vue         Vue technology skill
+    skill/
+      SKILL.md          fledge-vue
+```
+
+### CLI vs agent responsibilities
+
+The CLI provides commands that both humans and skills invoke. Skills delegate mechanical work to the CLI, then take over for tasks that need reasoning.
+
+```
+developer or skill
+        |
+        v
+  fledge <command>        <- CLI: deterministic, no LLM
+        |
+        v
+  files on disk           <- dirs, stubs, config, knowledge structure
+        |
+        v
+  skill takes over        <- agent: fills in content, makes decisions
+```
+
+| Responsibility              | Owner         | Examples                                             |
+| --------------------------- | ------------- | ---------------------------------------------------- |
+| Schemas and validation      | CLI           | Brief format, knowledge file structure, project config. Defined with zod, used by CLI commands and available to skills |
+| File and directory creation | CLI           | Create brief stubs, knowledge dirs, project scaffold |
+| Interactive project setup   | CLI           | `fledge init`, `fledge scaffold`                     |
+| Skill installation          | CLI           | Copy skill files on postinstall                      |
+| Listing and status          | CLI           | List briefs, list knowledge sources                  |
+| Understanding code          | Agent (skill) | Explore codebase, discover project knowledge         |
+| Writing brief content       | Agent (skill) | Requirements, design decisions, task breakdown       |
+| Enriching with context      | Agent (skill) | Connect brief to data models, conventions            |
+| Implementation guidance     | Agent (skill) | Technology skills guide agent through decisions      |
+| Verification                | Agent (skill) | Check implementation against brief and conventions   |
+
+### Global vs project-local
+
+`@fledge/cli` works both as a global install and as a project devDependency. One command is global-only:
+
+| Install context | Commands available                                            |
+| --------------- | ------------------------------------------------------------- |
+| Global          | `fledge scaffold` (creates a new project, runs before a project exists) |
+| Project-local   | Everything else: `init`, `install-skill`, `brief`, `knowledge` |
 
 ## Current state
 
