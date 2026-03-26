@@ -12,7 +12,7 @@ export default defineCommand({
     status: {
       type: 'string',
       required: false,
-      description: 'Filter by brief status (draft, active, completed)',
+      description: 'Filter by brief status (draft, ready, active, completed, cancelled)',
     },
     projectDirectory,
   },
@@ -28,7 +28,7 @@ export default defineCommand({
     let briefs = names.map((name) => {
       const brief = readBriefFrontmatter(ctx, name)
       const { tasks } = readTasksFrontmatter(ctx, name)
-      const done = tasks.filter(task => task.done).length
+      const done = tasks.filter(task => task.status === 'completed' || task.status === 'skipped').length
       return { ...brief, tasksDone: done, tasksTotal: tasks.length }
     })
 

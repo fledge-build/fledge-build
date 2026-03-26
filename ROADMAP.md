@@ -30,15 +30,16 @@ These principles guide what Fledge builds and how:
 The developer experience, from idea to implementation:
 
 ```
-Explore       <- Investigate the idea, understand the codebase, clarify scope
-Brief         <- Produce a feature brief: requirements, design, tasks
-Enrich        <- Connect the brief to project knowledge (data models, conventions, existing patterns)
-Implement     <- Execute tasks, guided by technology skills
+Brief         <- Capture what to build: requirements, scope, design decisions
+Enrich        <- Connect the brief to project knowledge (data models, APIs, domain concepts)
+Implement     <- Plan tasks using technology skills, then execute them
 Verify        <- Check completeness against the brief and convention compliance
 Complete      <- Summarize what was built, mark the brief as completed
 ```
 
-The workflow is fluid. Steps can be revisited: implementation may reveal design gaps, which flow back into the brief. Exploration may happen at any point. The sequence is a default, not a gate.
+The workflow is fluid. Steps can be revisited: implementation may reveal design gaps, which flow back into the brief. The sequence is a default, not a gate.
+
+Two skills own the workflow. The **brief skill** drives Brief and Enrich (producing the product-level brief and technical spec). The **implement skill** drives Implement, Verify, and Complete (breaking work into tasks, executing with technology skills, and closing out). See [docs/workflow.md](docs/workflow.md) for the full lifecycle, state transitions, and skill responsibilities.
 
 Completed briefs accumulate as project knowledge. Each completed brief requires a summary that captures what was built and key decisions made. When creating new briefs, the agent reads these summaries for context.
 
@@ -48,9 +49,10 @@ Two systems support the workflow:
 Project knowledge (living, maintained)       Feature briefs (per feature)
 ├── data models                              ├── recipe-versioning/
 ├── domain glossary                          │   ├── brief.md
-├── API conventions                          │   └── tasks.md
-├── architecture decisions                   └── recipe-sharing/
-└── installed skills + conventions               └── ...
+├── API conventions                          │   ├── spec.md
+├── architecture decisions                   │   └── tasks.md
+└── installed skills + conventions           └── recipe-sharing/
+                                                 └── ...
 ```
 
 ## Package architecture
@@ -62,9 +64,8 @@ packages/
   cli/                  @fledge/cli         CLI binary, devDependency or global
   workflow/             @fledge/workflow     Multiple workflow skills (project-local)
     skills/
-      brief/            fledge-brief        Feature brief lifecycle
-      explore/          fledge-explore      Codebase exploration
-      verify/           fledge-verify       Brief + convention compliance
+      brief/            fledge-brief        Feature brief lifecycle (brief + enrich)
+      implement/        fledge-implement    Task planning, execution, verification, completion
   scaffold/             @fledge/scaffold    Scaffolding skill (global install)
     skill/
       SKILL.md          fledge-scaffold     Templates, scripts, interactive conversation
@@ -140,17 +141,19 @@ Establish the skill model and prove it works.
 
 ### Phase 2: Workflow layer
 
-The feature-driven workflow. Provides the structure for moving from idea to implementation: explore, brief, enrich, implement, verify, complete.
+The feature-driven workflow. Provides the structure for moving from idea to implementation: brief, enrich, implement, verify, complete. See [docs/workflow.md](docs/workflow.md) for the full lifecycle design.
 
 > **Dependency:** The workflow must be designed before initialization (Phase 3) can be implemented, because initialization produces the project knowledge that the workflow consumes.
 
 - [x] Define the feature brief format (requirements, design, tasks) with zod schemas
-- [x] Brief lifecycle CLI commands (create, start, complete, status, list, validate, schema)
+- [x] Brief lifecycle CLI commands (create, ready, start, complete, cancel, status, list, validate, schema)
 - [x] Completion requires a summary for use as project context in future briefs
-- [ ] Design the workflow skill and how it interacts with technology skills
-- [ ] Build the enrichment step that connects briefs to project knowledge
-- [ ] Customized implementation step that discovers and activates installed technology skills
-- [ ] Verification that checks both brief compliance and convention compliance
+- [x] Brief states: draft, ready, active, completed, cancelled
+- [x] Task states: pending, active, completed, skipped
+- [x] Brief anatomy: brief.md (product), spec.md (technical context), tasks.md (implementation)
+- [x] Workflow design: brief skill owns Brief + Enrich, implement skill owns Implement + Verify + Complete
+- [ ] Build the implement skill: task planning with technology skills, execution, verification
+- [ ] Validate workflow through real project usage
 
 ### Phase 3: Project initialization
 

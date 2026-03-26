@@ -5,14 +5,14 @@ import { projectDirectory } from './shared.ts'
 
 export default defineCommand({
   meta: {
-    name: 'start',
-    description: 'Transition a brief from ready to active',
+    name: 'cancel',
+    description: 'Cancel a brief',
   },
   args: {
     name: {
       type: 'positional',
       required: true,
-      description: 'The name of the brief to start',
+      description: 'The name of the brief to cancel',
     },
     projectDirectory,
   },
@@ -25,10 +25,10 @@ export default defineCommand({
     }
 
     const brief = readBriefFrontmatter(ctx, name)
-    validateTransition(brief.status, 'active')
+    validateTransition(brief.status, 'cancelled')
 
-    updateBriefFrontmatter(ctx, name, { ...brief, status: 'active', updated: formatDate() })
+    updateBriefFrontmatter(ctx, name, { ...brief, status: 'cancelled', updated: formatDate() })
 
-    stdout.write(`Brief "${name}" is now active\n`)
+    stdout.write(`Brief "${name}" has been cancelled\n`)
   },
 })

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { stdout } from 'node:process'
 import { defineCommand } from 'citty'
-import { briefExists, createBriefContext, formatDate, getBriefDirectory, getBriefFile, getTasksFile } from '../../brief.ts'
+import { briefExists, createBriefContext, formatDate, getBriefDirectory, getBriefFile, getSpecFile, getTasksFile } from '../../brief.ts'
 import { writeFrontmatter } from '../../frontmatter.ts'
 import { projectDirectory } from './shared.ts'
 
@@ -39,6 +39,11 @@ export default defineCommand({
     fs.writeFileSync(
       getTasksFile(ctx, name),
       writeFrontmatter({ tasks: [] }),
+    )
+
+    fs.writeFileSync(
+      getSpecFile(ctx, name),
+      '',
     )
 
     stdout.write(`Created brief "${name}" at "${directory}"\n`)

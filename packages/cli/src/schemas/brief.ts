@@ -1,14 +1,9 @@
 import { z } from 'zod'
 
-export const briefStatus = z.enum(['draft', 'active', 'completed'])
+export const briefStatus = z.enum(['draft', 'ready', 'active', 'completed', 'cancelled'])
 
 export type BriefStatus = z.infer<typeof briefStatus>
 
-// TODO: Refactor to per-status schemas using z.discriminatedUnion('status', [...])
-// so each status variant carries its own validation rules (e.g. summary required
-// only for completed, tasks min(1) only for active). This would make the schema
-// the single source of truth for transition validation, replacing the manual checks
-// in the transition commands.
 export const briefFrontmatter = z.object({
   name: z.string().min(1),
   status: briefStatus,
@@ -22,9 +17,17 @@ export type BriefFrontmatter = z.infer<typeof briefFrontmatter>
 /**
  * Valid state transitions for a brief.
  * Each key maps to the set of states it can transition to.
+ *
+ * draft → ready: brief skill marks the brief as designed and enriched
+ * ready → active: implement skill begins implementation
+ * ready → draft: brief needs rework
+ * active → completed: implement skill finishes all tasks
+ * draft/ready/active → cancelled: feature is dropped
  */
 export const briefTransitions: Record<BriefStatus, readonly BriefStatus[]> = {
-  draft: ['active'],
-  active: ['completed', 'draft'],
+  draft: ['ready', 'cancelled'],
+  ready: ['active', 'draft', 'cancelled'],
+  active: ['completed', 'cancelled'],
   completed: [],
+  cancelled: [],
 }

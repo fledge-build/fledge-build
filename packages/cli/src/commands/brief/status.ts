@@ -22,14 +22,20 @@ function groupTasks(tasks: Task[]): Map<string, Task[]> {
 }
 
 /**
- * Formats a task as a line with a checkbox indicator.
+ * Maps a task status to a display indicator.
  *
  * @param task - The task to format.
- * @returns The formatted task string.
+ * @returns The formatted task string with status indicator.
  */
 function formatTask(task: Task): string {
-  const checkbox = task.done ? '[x]' : '[ ]'
-  return `  ${checkbox} ${task.name}`
+  const indicators: Record<string, string> = {
+    pending: '[ ]',
+    active: '[~]',
+    completed: '[x]',
+    skipped: '[-]',
+  }
+  const indicator = indicators[task.status] ?? '[ ]'
+  return `  ${indicator} ${task.name}`
 }
 
 export default defineCommand({
@@ -55,7 +61,7 @@ export default defineCommand({
 
     const brief = readBriefFrontmatter(ctx, name)
     const { tasks } = readTasksFrontmatter(ctx, name)
-    const done = tasks.filter(task => task.done).length
+    const done = tasks.filter(task => task.status === 'completed' || task.status === 'skipped').length
     const lines: string[] = []
 
     lines.push(`${name} [${brief.status}] ${done}/${tasks.length} tasks done`)

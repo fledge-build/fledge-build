@@ -32,10 +32,10 @@ export default defineCommand({
     }
 
     const tasks = readTasksFrontmatter(ctx, name)
-    const incomplete = tasks.tasks.filter(task => !task.done)
+    const incomplete = tasks.tasks.filter(task => task.status !== 'completed' && task.status !== 'skipped')
     if (incomplete.length > 0) {
-      const names = incomplete.map(task => `  - ${task.name}`).join('\n')
-      throw new Error(`Cannot complete brief with ${incomplete.length} incomplete task(s):\n${names}`)
+      const names = incomplete.map(task => `  - ${task.name} [${task.status}]`).join('\n')
+      throw new Error(`Cannot complete brief with ${incomplete.length} unfinished task(s):\n${names}`)
     }
 
     updateBriefFrontmatter(ctx, name, { ...brief, status: 'completed', updated: formatDate() })

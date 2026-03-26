@@ -67,6 +67,17 @@ export function getTasksFile(context: BriefContext, name: string): string {
 }
 
 /**
+ * Returns the absolute path to a brief's `spec.md` file.
+ *
+ * @param context - The brief context.
+ * @param name - The brief name.
+ * @returns The absolute path to `spec.md`.
+ */
+export function getSpecFile(context: BriefContext, name: string): string {
+  return path.join(getBriefDirectory(context, name), 'spec.md')
+}
+
+/**
  * Checks whether a brief directory exists.
  *
  * @param context - The brief context.
