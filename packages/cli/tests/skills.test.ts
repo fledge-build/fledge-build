@@ -121,10 +121,10 @@ describe('fledge skills', () => {
         const result = run(['skills', 'install', sourceDirectory, '--target', targetDirectory], targetDirectory)
 
         expect(result.exitCode).toBe(0)
-        expect(result.stdout).toContain('Installed skill "fledge-workflow-brief"')
-        expect(result.stdout).toContain('Installed skill "fledge-workflow-explore"')
-        expect(fs.existsSync(installedSkillFile(targetDirectory, 'fledge-workflow-brief'))).toBe(true)
-        expect(fs.existsSync(installedSkillFile(targetDirectory, 'fledge-workflow-explore'))).toBe(true)
+        expect(result.stdout).toContain('Installed skill "fledge-brief"')
+        expect(result.stdout).toContain('Installed skill "fledge-explore"')
+        expect(fs.existsSync(installedSkillFile(targetDirectory, 'fledge-brief'))).toBe(true)
+        expect(fs.existsSync(installedSkillFile(targetDirectory, 'fledge-explore'))).toBe(true)
       })
 
       it('updates the skill name in each SKILL.md', () => {
@@ -135,8 +135,8 @@ describe('fledge skills', () => {
 
         run(['skills', 'install', sourceDirectory, '--target', targetDirectory], targetDirectory)
 
-        const data = parseFrontmatter(readFile(installedSkillFile(targetDirectory, 'fledge-workflow-brief')))
-        expect(data).toMatchObject({ name: 'fledge-workflow-brief' })
+        const data = parseFrontmatter(readFile(installedSkillFile(targetDirectory, 'fledge-brief')))
+        expect(data).toMatchObject({ name: 'fledge-brief' })
       })
     })
 
@@ -199,10 +199,10 @@ describe('fledge skills', () => {
 
       const techResult = run(['skills', 'list', '--type', 'technology'], targetDirectory)
       expect(techResult.stdout).toContain('fledge-vue')
-      expect(techResult.stdout).not.toContain('fledge-workflow-brief')
+      expect(techResult.stdout).not.toContain('fledge-brief')
 
       const workflowResult = run(['skills', 'list', '--type', 'workflow'], targetDirectory)
-      expect(workflowResult.stdout).toContain('fledge-workflow-brief')
+      expect(workflowResult.stdout).toContain('fledge-brief')
       expect(workflowResult.stdout).not.toContain('fledge-vue')
     })
 

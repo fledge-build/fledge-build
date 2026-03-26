@@ -1,7 +1,7 @@
+import type { Task } from '../../schemas/tasks.ts'
 import { stdout } from 'node:process'
 import { defineCommand } from 'citty'
 import { briefExists, getBriefDirectory, readBriefFrontmatter, readTasksFrontmatter } from '../../brief.ts'
-import type { Task } from '../../schemas/tasks.ts'
 
 /**
  * Groups tasks by their group field. Tasks without a group are placed under an empty string key.

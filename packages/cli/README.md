@@ -17,7 +17,7 @@ pnpm add -D @fledge/cli
 Installs skills from a package into the project's skills directory. Supports two layouts:
 
 - **Single skill**: a `skill/` directory in the package. Installed as `<prefix>` (e.g. `@fledge/vue` becomes `fledge-vue`).
-- **Multiple skills**: a `skills/` directory with subdirectories. Each subdirectory is installed as `<prefix>-<name>` (e.g. `@fledge/workflow/skills/brief` becomes `fledge-workflow-brief`).
+- **Multiple skills**: a `skills/` directory with subdirectories. Each subdirectory is installed as `<scope>-<name>` (e.g. `@fledge/workflow/skills/brief` becomes `fledge-brief`).
 
 The skill name in SKILL.md frontmatter is updated to match the installed directory name. A `.gitignore` is written so the installed files are not committed.
 
@@ -52,7 +52,7 @@ Example output:
 
 ```
 fledge-vue             technology  Vue conventions
-fledge-workflow-brief  workflow    Brief lifecycle
+fledge-brief  workflow    Brief lifecycle
 ```
 
 | Option     | Description                                          |

@@ -30,7 +30,9 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
     "@types/node": "catalog:",
+    "eslint": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { stdout } from 'node:process'
 import { defineCommand } from 'citty'
 import { getGlobalDirectory, getProjectDirectory, listInstalledSkills } from '../../skills.ts'

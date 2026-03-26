@@ -1,32 +1,16 @@
 packages:
-  - playgrounds/*
   - packages/*
 
 catalog:
   '@antfu/eslint-config': 7.7.3
   '@changesets/cli': 2.30.0
-  '@iconify/vue': 5.0.0
-  '@tailwindcss/vite': 4.2.1
-  '@tanstack/vue-form': 1.28.3
-  '@tanstack/vue-query': 5.92.9
   '@types/node': 25.3.0
-  '@vitejs/plugin-vue': 6.0.4
-  '@vue/tsconfig': 0.8.1
-  '@vueuse/core': 14.2.1
   citty: 0.2.1
-  class-variance-authority: 0.7.1
   eslint: 10.1.0
   husky: 9.1.7
-  msw: 2.12.10
   nano-staged: 0.9.0
-  reka-ui: 2.8.2
-  tailwindcss: 4.2.1
   typescript: 5.9.3
-  vite: 8.0.0-beta.15
   vitest: 4.1.1
-  vue: 3.5.29
-  vue-router: 4.5.0
-  vue-tsc: 3.2.5
   yaml: 2.8.3
   zod: 4.3.6
 

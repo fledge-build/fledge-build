@@ -42,6 +42,18 @@ export function getSkillPrefix(packageName: string): string {
 }
 
 /**
+ * Extracts the scope from a scoped package name (e.g. `@fledge/workflow` becomes `fledge`).
+ * Returns the full package name if unscoped.
+ *
+ * @param packageName - The npm package name.
+ * @returns The scope without the `@` prefix.
+ */
+export function getScope(packageName: string): string {
+  const match = packageName.match(SCOPED_PACKAGE_PATTERN)
+  return match ? match[1]! : packageName
+}
+
+/**
  * Returns the default target directory for skill installation.
  * Uses `INIT_CWD` (set by npm/pnpm during postinstall) or falls back to `cwd()`.
  *
@@ -102,11 +114,12 @@ export function getSkillSources(packageDirectory: string, packageName: string): 
 
   if (layout === 'multiple') {
     const skillsDirectory = path.join(packageDirectory, 'skills')
+    const scope = getScope(packageName)
     return fs.readdirSync(skillsDirectory, { withFileTypes: true })
       .filter(entry => entry.isDirectory())
       .map(entry => ({
         source: path.join(skillsDirectory, entry.name),
-        name: `${getSkillPrefix(packageName)}-${entry.name}`,
+        name: `${scope}-${entry.name}`,
       }))
   }
 

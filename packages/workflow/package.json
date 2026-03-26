@@ -1,11 +1,11 @@
 {
-  "name": "@fledge/vue",
+  "name": "@fledge/workflow",
   "type": "module",
-  "version": "0.1.4",
+  "version": "0.0.1",
   "author": "René Schapka",
   "license": "MIT",
   "files": [
-    "skill"
+    "skills"
   ],
   "publishConfig": {
     "access": "public"
