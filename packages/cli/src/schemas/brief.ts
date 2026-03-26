@@ -19,9 +19,9 @@ export type BriefFrontmatter = z.infer<typeof briefFrontmatter>
  * Each key maps to the set of states it can transition to.
  *
  * draft → ready: brief skill marks the brief as designed and enriched
- * ready → active: implement skill begins implementation
+ * ready → active: build skill begins building
  * ready → draft: brief needs rework
- * active → completed: implement skill finishes all tasks
+ * active → completed: build skill finishes all tasks
  * draft/ready/active → cancelled: feature is dropped
  */
 export const briefTransitions: Record<BriefStatus, readonly BriefStatus[]> = {

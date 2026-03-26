@@ -7,7 +7,9 @@ import { parseFrontmatter, writeFrontmatter } from './frontmatter.ts'
 import { briefFrontmatter, briefTransitions } from './schemas/brief.ts'
 import { tasksFrontmatter } from './schemas/tasks.ts'
 
-const BRIEFS_DIRECTORY = path.join('.fledge', 'briefs')
+const FLEDGE_DIRECTORY = '.fledge'
+const BRIEFS_DIRECTORY = path.join(FLEDGE_DIRECTORY, 'briefs')
+const PROJECT_FILE = path.join(FLEDGE_DIRECTORY, 'project.md')
 
 export interface BriefContext {
   projectRoot: string
@@ -75,6 +77,16 @@ export function getTasksFile(context: BriefContext, name: string): string {
  */
 export function getSpecFile(context: BriefContext, name: string): string {
   return path.join(getBriefDirectory(context, name), 'spec.md')
+}
+
+/**
+ * Returns the absolute path to the project's `project.md` file.
+ *
+ * @param context - The brief context.
+ * @returns The absolute path to `.fledge/project.md`.
+ */
+export function getProjectFile(context: BriefContext): string {
+  return path.join(context.projectRoot, PROJECT_FILE)
 }
 
 /**

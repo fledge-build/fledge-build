@@ -13,12 +13,12 @@ allowed-tools: Bash(node *scripts/brief.js*)
 The brief skill owns two workflow phases: **Brief** (capture what to build) and **Enrich** (connect to project knowledge). See [docs/workflow.md](../../docs/workflow.md) for the full workflow.
 
 ```
-Brief  →  Enrich  →  [Implement]  →  [Verify]  →  [Complete]
-└── this skill ──┘    └── implement skill (future) ──────────┘
+Brief  →  Enrich  →  [Build]  →  [Verify]  →  [Complete]
+└── this skill ──┘    └── build skill (future) ──────────┘
 ```
 
 **States this skill manages:** `draft → ready`
-**States managed by the implement skill:** `ready → active → completed`
+**States managed by the build skill:** `ready → active → completed`
 
 A brief directory contains three files:
 
@@ -26,7 +26,7 @@ A brief directory contains three files:
 .fledge/briefs/<name>/
   brief.md      what, why, scope, design decisions (product-level)
   spec.md       data models, APIs, external services (technical context)
-  tasks.md      implementation tasks (empty until implement phase)
+  tasks.md      tasks (empty until build phase)
 ```
 
 ## Available scripts
@@ -83,7 +83,7 @@ Write the brief content into `brief.md`. The frontmatter is managed by the scrip
 - **Scope**: what is included and what is explicitly excluded
 - **Design decisions**: key choices made during this conversation, with reasoning
 
-Keep it concise. The brief is a reference for implementation, not a specification document. If something is obvious from the code, do not repeat it here.
+Keep it concise. The brief is a reference for building, not a specification document. If something is obvious from the code, do not repeat it here.
 
 Proceed to Step 3.
 
@@ -91,14 +91,20 @@ Proceed to Step 3.
 
 ## Step 3: Enrich with project knowledge
 
-Connect the brief to the technical reality of the project. Read the codebase and project knowledge sources to understand:
+Connect the brief to the technical reality of the project. Start by reading `.fledge/project.md` to understand the project landscape. If this file does not exist, suggest running `fledge init` first.
 
-- **Data models**: what existing models does the feature interact with? What new models are needed?
-- **APIs**: what endpoints exist? What new endpoints are needed?
-- **External services**: what third-party integrations are involved?
-- **Domain concepts**: what domain terms and relationships are relevant?
+Walk through each section of `project.md` with the brief in mind:
 
-Write this technical context into `spec.md`. The spec grounds the product-level brief in the project's actual structure. It does **not** include implementation tasks or technology-specific guidance (those come from the implement skill and technology skills).
+1. **Domain**: which concepts from the glossary does this feature involve? Are there new domain terms that need defining?
+2. **Data models**: which existing models does the feature interact with? Are new models or fields needed?
+3. **APIs**: which existing endpoints are relevant? Are new endpoints needed? Do they follow the documented conventions?
+4. **External services**: does this feature involve any third-party integrations?
+5. **Conventions**: are there project-specific patterns the build should follow?
+6. **Stack**: which technology skills are available to guide the build?
+
+Write the relevant findings into `spec.md`. The spec grounds the product-level brief in the project's actual structure. It does **not** include tasks or technology-specific guidance (those come from the build skill and technology skills).
+
+**Gap detection**: if you discover aspects of the project that are not reflected in `project.md` (an undocumented endpoint, a model that is missing, a domain concept that should be in the glossary), note these gaps and suggest updates to `project.md`. Keeping project knowledge current is part of enrichment.
 
 Proceed to Step 4.
 
@@ -110,7 +116,7 @@ Run `node scripts/brief.js validate <name> --project-dir <path>` to confirm the 
 
 Present the complete brief (`brief.md`) and spec (`spec.md`) to the user for review.
 
-Once approved, run `node scripts/brief.js ready <name> --project-dir <path>` to transition to ready. The brief is now ready for the implement skill to pick up.
+Once approved, run `node scripts/brief.js ready <name> --project-dir <path>` to transition to ready. The brief is now ready for the build skill to pick up.
 
 ---
 

@@ -6,10 +6,10 @@ AI-assisted development is only as good as the workflow it operates within. Most
 
 The core idea is the **what/how split**:
 
-- **"The what"** -- what to build. Feature-driven briefs that capture intent, requirements, and design decisions. Enriched with project knowledge before implementation begins.
-- **"The how"** -- how to build it. Technology-specific skills that guide agents through implementation decisions using decision trees, conventions, and patterns.
+- **"The what"** -- what to build. Feature-driven briefs that capture intent, requirements, and design decisions. Enriched with project knowledge before building begins.
+- **"The how"** -- how to build it. Technology-specific skills that guide agents through decisions using decision trees, conventions, and patterns.
 
-Between the two sits **project knowledge**: a living understanding of the system (data models, domain glossary, API conventions, architecture decisions) that bridges the gap. The workflow layer produces feature briefs enriched by project knowledge. The technology skills consume those briefs and produce implementation that follows team conventions.
+Between the two sits **project knowledge**: a living understanding of the system (data models, domain glossary, API conventions, architecture decisions) that bridges the gap. The workflow layer produces feature briefs enriched by project knowledge. The technology skills consume those briefs and produce code that follows team conventions.
 
 ## Strategy
 
@@ -20,26 +20,26 @@ These principles guide what Fledge builds and how:
 - **Project knowledge as a living system.** The agent's understanding of the project is not a static config file. It is structured, discoverable, and maintained as the project evolves. Initialization creates it, the workflow consumes it, and completed features feed back into it.
 - **Progressive adoption.** Every package delivers standalone value. Technology skills work without the workflow layer. The full workflow emerges naturally as more pieces are adopted.
 - **Technology-aware, not technology-agnostic.** Generic tools produce generic results. Fledge ships opinionated, technology-specific skills that guide agents through implementation decisions.
-- **Fluid, not linear.** The workflow supports exploration, iteration, and revision. Feature briefs can be refined during implementation. Rigid phase gates do not reflect how real work happens.
+- **Fluid, not linear.** The workflow supports exploration, iteration, and revision. Feature briefs can be refined during building. Rigid phase gates do not reflect how real work happens.
 - **Human-in-the-loop, not human-at-the-end.** The agent drives the conversation, but the human makes the decisions. Workflow skills are interactive: they ask questions, propose options, and wait for direction. Because all artifacts are plain files, the human can also edit outside the agent conversation at any time. The agent assists; the human owns the outcome. To keep this efficient, the agent should make obvious decisions autonomously and present remaining choices as specific options rather than open-ended questions.
 - **No runtime.** No daemon, no server, no proprietary format. Everything is files the agent reads and conventions the agent follows. The CLI has no dependency on agent capabilities.
-- **Design over implementation time.** Spending more time on design and specification makes implementation straightforward for agents.
+- **Design over build time.** Spending more time on design and specification makes building straightforward for agents.
 
 ## The workflow
 
-The developer experience, from idea to implementation:
+The developer experience, from idea to working code:
 
 ```
 Brief         <- Capture what to build: requirements, scope, design decisions
 Enrich        <- Connect the brief to project knowledge (data models, APIs, domain concepts)
-Implement     <- Plan tasks using technology skills, then execute them
+Build         <- Plan tasks using technology skills, then execute them
 Verify        <- Check completeness against the brief and convention compliance
 Complete      <- Summarize what was built, mark the brief as completed
 ```
 
-The workflow is fluid. Steps can be revisited: implementation may reveal design gaps, which flow back into the brief. The sequence is a default, not a gate.
+The workflow is fluid. Steps can be revisited: building may reveal design gaps, which flow back into the brief. The sequence is a default, not a gate.
 
-Two skills own the workflow. The **brief skill** drives Brief and Enrich (producing the product-level brief and technical spec). The **implement skill** drives Implement, Verify, and Complete (breaking work into tasks, executing with technology skills, and closing out). See [docs/workflow.md](docs/workflow.md) for the full lifecycle, state transitions, and skill responsibilities.
+Two skills own the workflow. The **brief skill** drives Brief and Enrich (producing the product-level brief and technical spec). The **build skill** drives Build, Verify, and Complete (breaking work into tasks, executing with technology skills, and closing out). See [docs/workflow.md](docs/workflow.md) for the full lifecycle, state transitions, and skill responsibilities.
 
 Completed briefs accumulate as project knowledge. Each completed brief requires a summary that captures what was built and key decisions made. When creating new briefs, the agent reads these summaries for context.
 
@@ -57,7 +57,7 @@ Project knowledge (living, maintained)       Feature briefs (per feature)
 
 ## Package architecture
 
-Two types of packages, one clear boundary: the CLI handles mechanical operations (files, directories, scaffolding), skills handle tasks that require understanding and judgment (writing briefs, exploring code, verifying implementation).
+Two types of packages, one clear boundary: the CLI handles mechanical operations (files, directories, scaffolding), skills handle tasks that require understanding and judgment (writing briefs, exploring code, verifying results).
 
 ```
 packages/
@@ -65,7 +65,7 @@ packages/
   workflow/             @fledge/workflow     Multiple workflow skills (project-local)
     skills/
       brief/            fledge-brief        Feature brief lifecycle (brief + enrich)
-      implement/        fledge-implement    Task planning, execution, verification, completion
+      build/            fledge-build        Task planning, execution, verification, completion
   scaffold/             @fledge/scaffold    Scaffolding skill (global install)
     skill/
       SKILL.md          fledge-scaffold     Templates, scripts, interactive conversation
@@ -101,15 +101,15 @@ developer or skill
 | Understanding code          | Agent (skill) | Explore codebase, discover project knowledge         |
 | Writing brief content       | Agent (skill) | Requirements, design decisions, task breakdown       |
 | Enriching with context      | Agent (skill) | Connect brief to data models, conventions            |
-| Implementation guidance     | Agent (skill) | Technology skills guide agent through decisions      |
-| Verification                | Agent (skill) | Check implementation against brief and conventions   |
+| Build guidance              | Agent (skill) | Technology skills guide agent through decisions      |
+| Verification                | Agent (skill) | Check results against brief and conventions          |
 
 ### Global vs project-local
 
 | Package            | Install context | Purpose                                                 |
 | ------------------ | --------------- | ------------------------------------------------------- |
 | `@fledge/cli`      | Project-local   | CLI binary, all project commands (`init`, `brief`, etc) |
-| `@fledge/workflow`  | Project-local   | Workflow skills (brief, explore, verify)                |
+| `@fledge/workflow`  | Project-local   | Workflow skills (brief, build)                          |
 | `@fledge/vue`      | Project-local   | Vue technology skill                                    |
 | `@fledge/scaffold` | Global          | Scaffolding skill, runs before a project exists         |
 
@@ -141,18 +141,18 @@ Establish the skill model and prove it works.
 
 ### Phase 2: Workflow layer
 
-The feature-driven workflow. Provides the structure for moving from idea to implementation: brief, enrich, implement, verify, complete. See [docs/workflow.md](docs/workflow.md) for the full lifecycle design.
+The feature-driven workflow. Provides the structure for moving from idea to working code: brief, enrich, build, verify, complete. See [docs/workflow.md](docs/workflow.md) for the full lifecycle design.
 
-> **Dependency:** The workflow must be designed before initialization (Phase 3) can be implemented, because initialization produces the project knowledge that the workflow consumes.
+> **Dependency:** The workflow must be designed before initialization (Phase 3) can be built, because initialization produces the project knowledge that the workflow consumes.
 
 - [x] Define the feature brief format (requirements, design, tasks) with zod schemas
 - [x] Brief lifecycle CLI commands (create, ready, start, complete, cancel, status, list, validate, schema)
 - [x] Completion requires a summary for use as project context in future briefs
 - [x] Brief states: draft, ready, active, completed, cancelled
 - [x] Task states: pending, active, completed, skipped
-- [x] Brief anatomy: brief.md (product), spec.md (technical context), tasks.md (implementation)
-- [x] Workflow design: brief skill owns Brief + Enrich, implement skill owns Implement + Verify + Complete
-- [ ] Build the implement skill: task planning with technology skills, execution, verification
+- [x] Brief anatomy: brief.md (product), spec.md (technical context), tasks.md (tasks)
+- [x] Workflow design: brief skill owns Brief + Enrich, build skill owns Build + Verify + Complete
+- [ ] Build the build skill: task planning with technology skills, execution, verification
 - [ ] Validate workflow through real project usage
 
 ### Phase 3: Project initialization
@@ -162,7 +162,7 @@ Prepares a project for the Fledge workflow. Likely involves two concerns that ma
 - **Mechanical setup** -- which technology skills to install, project structure, initial configuration. This may be a CLI command (`fledge init`), similar to how other tools handle interactive project setup.
 - **Project knowledge discovery** -- understanding the existing codebase: data models, domain concepts, API conventions, existing patterns. This likely needs agent intelligence and may be better served by a skill.
 
-The right split will become clearer during implementation. Key deliverables regardless of approach:
+The right split will become clearer as it is built. Key deliverables regardless of approach:
 
 - [ ] Discover and register project knowledge sources (data models, domain glossary, API conventions)
 - [ ] Connect installed technology skills to project context
