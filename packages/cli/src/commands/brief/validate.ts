@@ -1,10 +1,11 @@
 import fs from 'node:fs'
 import { stdout } from 'node:process'
 import { defineCommand } from 'citty'
-import { briefExists, getBriefDirectory, getBriefFile, getTasksFile } from '../../brief.ts'
+import { briefExists, createBriefContext, getBriefDirectory, getBriefFile, getTasksFile } from '../../brief.ts'
 import { parseFrontmatter } from '../../frontmatter.ts'
 import { briefFrontmatter } from '../../schemas/brief.ts'
 import { tasksFrontmatter } from '../../schemas/tasks.ts'
+import { projectDirectory } from './shared.ts'
 
 export default defineCommand({
   meta: {
@@ -17,17 +18,19 @@ export default defineCommand({
       required: true,
       description: 'The name of the brief to validate',
     },
+    projectDirectory,
   },
   run(context) {
+    const ctx = createBriefContext(context.args.projectDirectory)
     const { name } = context.args
 
-    if (!briefExists(name)) {
-      throw new Error(`Brief "${name}" does not exist at "${getBriefDirectory(name)}"`)
+    if (!briefExists(ctx, name)) {
+      throw new Error(`Brief "${name}" does not exist at "${getBriefDirectory(ctx, name)}"`)
     }
 
     const errors: string[] = []
 
-    const briefContent = fs.readFileSync(getBriefFile(name), 'utf8')
+    const briefContent = fs.readFileSync(getBriefFile(ctx, name), 'utf8')
     const briefResult = briefFrontmatter.safeParse(parseFrontmatter(briefContent))
     if (!briefResult.success) {
       for (const issue of briefResult.error.issues) {
@@ -35,7 +38,7 @@ export default defineCommand({
       }
     }
 
-    const tasksContent = fs.readFileSync(getTasksFile(name), 'utf8')
+    const tasksContent = fs.readFileSync(getTasksFile(ctx, name), 'utf8')
     const tasksResult = tasksFrontmatter.safeParse(parseFrontmatter(tasksContent))
     if (!tasksResult.success) {
       for (const issue of tasksResult.error.issues) {

@@ -1,6 +1,7 @@
 import { stdout } from 'node:process'
 import { defineCommand } from 'citty'
-import { listBriefs, readBriefFrontmatter, readTasksFrontmatter } from '../../brief.ts'
+import { createBriefContext, listBriefs, readBriefFrontmatter, readTasksFrontmatter } from '../../brief.ts'
+import { projectDirectory } from './shared.ts'
 
 export default defineCommand({
   meta: {
@@ -13,9 +14,11 @@ export default defineCommand({
       required: false,
       description: 'Filter by brief status (draft, active, completed)',
     },
+    projectDirectory,
   },
   run(context) {
-    const names = listBriefs()
+    const ctx = createBriefContext(context.args.projectDirectory)
+    const names = listBriefs(ctx)
 
     if (names.length === 0) {
       stdout.write('No briefs found\n')
@@ -23,8 +26,8 @@ export default defineCommand({
     }
 
     let briefs = names.map((name) => {
-      const brief = readBriefFrontmatter(name)
-      const { tasks } = readTasksFrontmatter(name)
+      const brief = readBriefFrontmatter(ctx, name)
+      const { tasks } = readTasksFrontmatter(ctx, name)
       const done = tasks.filter(task => task.done).length
       return { ...brief, tasksDone: done, tasksTotal: tasks.length }
     })
