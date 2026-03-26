@@ -9,6 +9,10 @@
       "types": "./dist/run-brief.d.ts",
       "default": "./dist/run-brief.js"
     },
+    "./init": {
+      "types": "./dist/run-init.d.ts",
+      "default": "./dist/run-init.js"
+    },
     "./skills": {
       "types": "./dist/run-skills.d.ts",
       "default": "./dist/run-skills.js"
