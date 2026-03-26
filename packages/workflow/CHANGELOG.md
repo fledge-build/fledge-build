@@ -1,5 +1,11 @@
 # @fledge/workflow
 
+## 0.6.1
+
+### Patch Changes
+
+- 9c743c8: Update brief skill to allow direct script execution and clarify invocation instructions.
+
 ## 0.6.0
 
 ### Minor Changes
