@@ -38,7 +38,7 @@ packages/vue/
 
 ## Status
 
-Early stage. The focus right now is on `@fledge/vue` as the first skill package, to establish what works well before expanding to other technologies. See [ROADMAP.md](ROADMAP.md) for the full strategy and planned phases.
+Early stage. `@fledge/vue` is the first technology skill, establishing the skill model. `@fledge/workflow` provides the first workflow skill (`fledge-brief`) for feature-driven planning. See [ROADMAP.md](ROADMAP.md) for the full strategy and planned phases.
 
 ## Using in a project
 
@@ -87,8 +87,9 @@ No manual release steps are required.
 
 | Change                                                          | Bump    |
 | --------------------------------------------------------------- | ------- |
-| Fixing incorrect skill content                                  | `patch` |
-| Adding a new reference file to an existing skill                | `patch` |
+| Fixing incorrect skill content                                     | `patch` |
+| Adding a new reference file to an existing skill                   | `patch` |
+| Adding a new skill or meaningful feature                           | `minor` |
 | Changing the install mechanism or skill structure in a breaking way | `major` |
 
 ## Contributing
@@ -116,6 +117,6 @@ The playground is the primary environment for iterating on skills: open Claude f
 
 To sync the latest skill changes into the playground:
 
-1. Edit skill files under `packages/<package>/skill/`
+1. Edit skill files under `packages/<package>/skill/` (single-skill) or `packages/<package>/skills/` (multi-skill)
 2. Run `pnpm install` from the **playground directory** (e.g. `playgrounds/vue`) to trigger the postinstall and sync skill files
 3. Open your agent from the **playground directory**. Skills are picked up automatically
