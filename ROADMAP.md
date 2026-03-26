@@ -207,4 +207,4 @@ Additional technology skills following the established design principles.
 
 **Installing skills from repositories.** The `fledge skills install` command currently works with npm packages. Supporting direct installation from a git repository would make it easier for teams to create and share custom skills without publishing to npm.
 
-**Self-contained skill scripts.** Workflow skills currently use `npx -y @fledge/cli` to invoke the CLI at runtime. An alternative is to split `@fledge/cli` into a core library (`@fledge/core`) and bundle self-contained scripts into the distributed skills using a build step. This would remove the runtime dependency on `npx` and make skills fully portable. See the [agent skills script spec](https://agentskills.io/skill-creation/using-scripts) for supported patterns (PEP 723, Deno, Bun).
+**Self-contained skill scripts.** Workflow skills bundle self-contained scripts using rolldown. Each script imports from `@fledge/cli` and is bundled with all dependencies inlined, so skills have zero runtime dependencies. See the [agent skills script spec](https://agentskills.io/skill-creation/using-scripts) for the broader pattern.

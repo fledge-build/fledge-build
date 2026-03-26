@@ -5,6 +5,7 @@
   "author": "René Schapka",
   "license": "MIT",
   "files": [
+    "dist",
     "skills"
   ],
   "publishConfig": {
@@ -14,7 +15,9 @@
     "node": ">=24"
   },
   "scripts": {
+    "prepare": "pnpm build",
     "postinstall": "fledge skills install",
+    "build": "rolldown -c",
     "lint": "eslint . --fix"
   },
   "dependencies": {
@@ -22,6 +25,9 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
-    "eslint": "catalog:"
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "rolldown": "catalog:",
+    "typescript": "catalog:"
   }
 }

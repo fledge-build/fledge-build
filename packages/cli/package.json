@@ -4,6 +4,16 @@
   "version": "0.6.0",
   "author": "René Schapka",
   "license": "MIT",
+  "exports": {
+    "./brief": {
+      "types": "./dist/run-brief.d.ts",
+      "default": "./dist/run-brief.js"
+    },
+    "./skills": {
+      "types": "./dist/run-skills.d.ts",
+      "default": "./dist/run-skills.js"
+    }
+  },
   "bin": {
     "fledge": "./dist/fledge-binary.js"
   },

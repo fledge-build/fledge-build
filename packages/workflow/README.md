@@ -8,7 +8,7 @@ Workflow skills for the [Fledge](https://github.com/fledge-build/fledge-build) d
 pnpm add -D @fledge/workflow
 ```
 
-On install, skills are automatically copied into your project's `.claude/skills/` directory. The `@fledge/cli` binary is resolved via `npx` at runtime, no separate install needed.
+On install, skills are automatically copied into your project's `.claude/skills/` directory. Skills bundle self-contained scripts with all dependencies inlined, so no additional packages are needed at runtime.
 
 ## Skills
 
@@ -26,10 +26,10 @@ The skill walks through:
 2. **Continue a brief** -- review progress, update tasks, revise scope
 3. **Complete a brief** -- write a summary, validate, and mark as done
 
-The skill uses `fledge brief` CLI commands for file operations and state transitions. All artifacts are plain markdown files with YAML frontmatter, stored in `.fledge/briefs/`.
+The skill includes bundled scripts for brief lifecycle operations. All artifacts are plain markdown files with YAML frontmatter, stored in `.fledge/briefs/`.
 
 ## Dependencies
 
-| Package       | Role                                                    |
-| ------------- | ------------------------------------------------------- |
-| `@fledge/cli` | Resolved via `npx` at runtime. Provides brief lifecycle commands, schema validation, and skill installation |
+| Package       | Role                                                                 |
+| ------------- | -------------------------------------------------------------------- |
+| `@fledge/cli` | Build-time dependency. Bundled into self-contained scripts via rolldown |
