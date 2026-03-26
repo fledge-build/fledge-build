@@ -1,4 +1,10 @@
-Stage all local changes and prepare a release commit with a changeset.
+---
+name: changeset
+description: >-
+  Stage all local changes and prepare a release commit with a changeset.
+  Invoked directly via /changeset, not auto-triggered.
+allowed-tools: Bash(git add *), Bash(git diff *), Bash(git commit *), Bash(pnpm changeset *), Read, Write
+---
 
 ## Steps
 
@@ -6,7 +12,7 @@ Stage all local changes and prepare a release commit with a changeset.
 
 2. Run `git diff --cached --stat` and `git diff --cached` to understand what changed.
 
-3. Determine which publishable packages are affected. Publishable packages are those without `"private": true` in their `package.json`. Check each changed file's path to identify which package it belongs to.
+3. Determine which publishable packages are affected. Publishable packages are those without `"private": true` in their `package.json`. Read each affected package's `package.json` to check. Files outside of `packages/` do not belong to any publishable package and should be ignored for changeset purposes.
 
 4. Based on the changes, suggest a bump type for each affected package:
    - **patch**: fixes, content tweaks, dependency updates
