@@ -1,5 +1,16 @@
 # @fledge/workflow
 
+## 0.5.0
+
+### Minor Changes
+
+- 808fb79: Add FLEDGE_PROJECT_DIR environment variable support. Brief commands resolve the project root from this variable, falling back to cwd(). Workflow skill instructs the agent to set it before running scripts, solving the path mismatch when scripts run from the skill directory. Scripts are referenced as executables (no node prefix) in the skill instructions.
+
+### Patch Changes
+
+- Updated dependencies [808fb79]
+  - @fledge/cli@0.8.0
+
 ## 0.4.0
 
 ### Minor Changes
