@@ -1,5 +1,11 @@
 # @fledge/cli
 
+## 0.10.0
+
+### Minor Changes
+
+- cf1f468: Redesign workflow lifecycle: add `ready` and `cancelled` brief states, replace task `done` boolean with `status` enum (pending, active, completed, skipped), add `spec.md` for technical context, and new `ready`/`cancel` CLI commands. Brief skill updated with enrich step and new state transitions.
+
 ## 0.9.1
 
 ### Patch Changes
