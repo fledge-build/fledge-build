@@ -1,5 +1,16 @@
 # @fledge/workflow
 
+## 0.4.0
+
+### Minor Changes
+
+- 0a42bbf: Bundle workflow skill scripts as self-contained executables using rolldown. The CLI exports @fledge/cli/brief and @fledge/cli/skills as programmatic entry points. The workflow package imports these and rolldown bundles them with all dependencies inlined into dist/scripts/. During fledge skills install, scripts from dist/scripts/ are automatically copied into each installed skill directory and made executable (shebang detection). Skills no longer require any runtime dependencies in the consuming project.
+
+### Patch Changes
+
+- Updated dependencies [0a42bbf]
+  - @fledge/cli@0.7.0
+
 ## 0.3.0
 
 ### Minor Changes
