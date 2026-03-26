@@ -5,10 +5,9 @@
   "author": "René Schapka",
   "license": "MIT",
   "bin": {
-    "fledge": "./bin/fledge.js"
+    "fledge": "./dist/fledge-binary.js"
   },
   "files": [
-    "bin",
     "dist"
   ],
   "publishConfig": {
@@ -18,15 +17,21 @@
     "node": ">=24"
   },
   "scripts": {
+    "prepare": "pnpm build",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --fix",
-    "build": "tsc -p tsconfig.build.json"
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "citty": "catalog:"
+    "citty": "catalog:",
+    "yaml": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

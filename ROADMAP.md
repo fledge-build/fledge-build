@@ -60,12 +60,15 @@ Two types of packages, one clear boundary: the CLI handles mechanical operations
 ```
 packages/
   cli/                  @fledge/cli         CLI binary, devDependency or global
-  workflow/             @fledge/workflow     Multiple workflow skills
+  workflow/             @fledge/workflow     Multiple workflow skills (project-local)
     skills/
       brief/            fledge-brief        Feature brief lifecycle
       explore/          fledge-explore      Codebase exploration
       verify/           fledge-verify       Brief + convention compliance
-  vue/                  @fledge/vue         Vue technology skill
+  scaffold/             @fledge/scaffold    Scaffolding skill (global install)
+    skill/
+      SKILL.md          fledge-scaffold     Templates, scripts, interactive conversation
+  vue/                  @fledge/vue         Vue technology skill (project-local)
     skill/
       SKILL.md          fledge-vue
 ```
@@ -102,12 +105,12 @@ developer or skill
 
 ### Global vs project-local
 
-`@fledge/cli` works both as a global install and as a project devDependency. One command is global-only:
-
-| Install context | Commands available                                            |
-| --------------- | ------------------------------------------------------------- |
-| Global          | `fledge scaffold` (creates a new project, runs before a project exists) |
-| Project-local   | Everything else: `init`, `install-skill`, `brief`, `knowledge` |
+| Package            | Install context | Purpose                                                 |
+| ------------------ | --------------- | ------------------------------------------------------- |
+| `@fledge/cli`      | Project-local   | CLI binary, all project commands (`init`, `brief`, etc) |
+| `@fledge/workflow`  | Project-local   | Workflow skills (brief, explore, verify)                |
+| `@fledge/vue`      | Project-local   | Vue technology skill                                    |
+| `@fledge/scaffold` | Global          | Scaffolding skill, runs before a project exists         |
 
 ## Current state
 
@@ -161,14 +164,14 @@ The right split will become clearer during implementation. Key deliverables rega
 - [ ] Connect installed technology skills to project context
 - [ ] Establish the project knowledge structure so it can be maintained as the project evolves
 
-### Phase 4: Project scaffolding
+### Phase 4: Project scaffolding (`@fledge/scaffold`)
 
-Agent-based scaffolding for new projects. Runs before a project exists, installed globally so it's available from any directory.
+Agent-based scaffolding for new projects. Separate package (`@fledge/scaffold`), installed globally so it's available from any directory. Contains the scaffolding skill with conversation structure, project templates, and scripts.
 
 - [ ] Scaffolding skill that guides the agent through project setup interactively (what are we building, which technologies)
+- [ ] Project templates and scripts bundled with the skill
 - [ ] Scaffolds project structure, generates `package.json`, installs Fledge technology packages
 - [ ] Auto-runs project initialization (Phase 3) after scaffolding completes
-- [ ] Global install mechanism (user-level, not project-level)
 
 ### Phase 5: Quality gates
 

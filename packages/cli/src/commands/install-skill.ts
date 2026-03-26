@@ -3,10 +3,9 @@ import os from 'node:os'
 import path from 'node:path'
 import { cwd, env, stdout } from 'node:process'
 import { defineCommand } from 'citty'
+import { parseFrontmatter, writeFrontmatter } from '../frontmatter.ts'
 
 const SCOPED_PACKAGE_PATTERN = /^@([\w-]+)\/(.+)/
-const FRONTMATTER_PATTERN = /^---\n([\s\S]*?\n)---/m
-const SKILL_NAME_PATTERN = /^name:.+$/m
 
 /**
  * Relative path from a project (or home directory for global installs) to the
@@ -66,11 +65,9 @@ function installSkill({ packageDirectory, global }: InstallSkillOptions) {
   const skillFile = path.join(targetDirectory, 'SKILL.md')
   const targetSkillName = path.basename(targetDirectory)
   const content = fs.readFileSync(skillFile, 'utf8')
-  const updated = content.replace(
-    FRONTMATTER_PATTERN,
-    (_, frontmatter) => `---\n${frontmatter.replace(SKILL_NAME_PATTERN, `name: ${targetSkillName}`)}\n---`,
-  )
-  fs.writeFileSync(skillFile, updated)
+  const data = parseFrontmatter(content)
+  data.name = targetSkillName
+  fs.writeFileSync(skillFile, writeFrontmatter(data, content))
 
   fs.writeFileSync(path.join(targetDirectory, '.gitignore'), '*\n')
 
