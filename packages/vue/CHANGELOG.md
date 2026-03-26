@@ -1,5 +1,13 @@
 # @fledge/vue
 
+## 0.1.3
+
+### Patch Changes
+
+- d96f6fb: Restructure skill installation. Replace fledge install-skill with fledge skills install, adding support for multi-skill packages and explicit --target flag. Add fledge skills list with type filtering via SKILL.md metadata.
+- Updated dependencies [d96f6fb]
+  - @fledge/cli@0.3.0
+
 ## 0.1.2
 
 ### Patch Changes

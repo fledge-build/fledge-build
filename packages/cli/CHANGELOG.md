@@ -1,5 +1,11 @@
 # @fledge/cli
 
+## 0.3.0
+
+### Minor Changes
+
+- d96f6fb: Restructure skill installation. Replace fledge install-skill with fledge skills install, adding support for multi-skill packages and explicit --target flag. Add fledge skills list with type filtering via SKILL.md metadata.
+
 ## 0.2.0
 
 ### Minor Changes
