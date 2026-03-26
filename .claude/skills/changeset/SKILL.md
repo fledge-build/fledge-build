@@ -3,7 +3,7 @@ name: changeset
 description: >-
   Stage all local changes and prepare a release commit with a changeset.
   Invoked directly via /changeset, not auto-triggered.
-allowed-tools: Bash(git add *), Bash(git diff *), Bash(git commit *), Bash(pnpm changeset *), Read, Write
+allowed-tools: Bash(git add:*), Bash(git diff:*), Bash(git commit:*), Bash(pnpm changeset:*), Read, Write
 ---
 
 ## Steps

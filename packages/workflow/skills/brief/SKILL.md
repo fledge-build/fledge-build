@@ -5,7 +5,7 @@ description: >-
   Invoked directly via /fledge-brief, not auto-triggered.
 metadata:
   type: workflow
-allowed-tools: Bash(node scripts/brief.js *)
+allowed-tools: Bash(node *scripts/brief.js *)
 ---
 
 ## Available scripts
