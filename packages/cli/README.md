@@ -4,7 +4,7 @@ CLI tooling for the [Fledge](https://github.com/fledge-build/fledge-build) devel
 
 ## Install
 
-As a project dependency (most common):
+Skill packages resolve `@fledge/cli` via `npx` at runtime, so direct installation is optional. To install explicitly (for faster CLI access or local development):
 
 ```bash
 pnpm add -D @fledge/cli

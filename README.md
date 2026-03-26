@@ -30,10 +30,11 @@ packages/vue/
 
 ## Packages
 
-| Package        | Type             | Description                                            |
-| -------------- | ---------------- | ------------------------------------------------------ |
-| `@fledge/cli` | Shared library   | Install utilities, shared primitives for skill packages |
-| `@fledge/vue`  | Skill package    | Vue conventions, component patterns, data fetching     |
+| Package             | Type           | Description                                            |
+| ------------------- | -------------- | ------------------------------------------------------ |
+| `@fledge/cli`       | CLI            | Brief lifecycle, skill installation, schema validation |
+| `@fledge/workflow`  | Workflow skills | Feature brief creation and lifecycle (`fledge-brief`)  |
+| `@fledge/vue`       | Technology skill | Vue conventions, component patterns, data fetching     |
 
 ## Status
 
@@ -42,10 +43,10 @@ Early stage. The focus right now is on `@fledge/vue` as the first skill package,
 ## Using in a project
 
 ```bash
-pnpm add -D @fledge/vue
+pnpm add -D @fledge/workflow @fledge/vue
 ```
 
-The skill is installed automatically via `postinstall` and available to agents immediately.
+Skills are installed automatically via `postinstall` and available to agents immediately. The `@fledge/cli` binary is resolved via `npx` at runtime, no separate install needed.
 
 ## Skill design principles
 
