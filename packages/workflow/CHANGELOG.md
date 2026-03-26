@@ -1,5 +1,11 @@
 # @fledge/workflow
 
+## 0.2.0
+
+### Minor Changes
+
+- 7fca727: Switch @fledge/cli from dependency to peerDependency so the binary is hoisted and available in consuming projects.
+
 ## 0.1.0
 
 ### Minor Changes
