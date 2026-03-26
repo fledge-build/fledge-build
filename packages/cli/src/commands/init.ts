@@ -37,14 +37,20 @@ const TEMPLATE = `# Project
 
 ## Stack
 
-<!-- Technology stack and installed Fledge skills.
+<!-- High-level description of the technology stack, followed by a table
+     listing each technology with its version and any installed Fledge skill.
 
      Example:
+
      Vue 3 frontend with TypeScript, Vite for bundling.
      Hono API server with Drizzle ORM on PostgreSQL.
 
-     Technology skills:
-     - @fledge/vue -- components, composables, data fetching, forms, styling -->
+     | Technology   | Version | Fledge skill |
+     | ------------ | ------- | ------------ |
+     | Vue 3        | 3.5     | @fledge/vue  |
+     | Hono         | 4.11    |              |
+     | Drizzle ORM  | 0.45    |              |
+     | TypeScript   | 5.9     |              | -->
 `
 
 export default defineCommand({

@@ -155,7 +155,7 @@ Run `fledge init` to create the file with a template. The content is filled in b
 | **APIs**             | Endpoint patterns, conventions, authentication approach             |
 | **External services**| Third-party integrations and what they are used for                 |
 | **Conventions**      | Project-specific patterns not covered by technology skills          |
-| **Stack**            | Technology stack and installed Fledge technology skills              |
+| **Stack**            | Technology stack with versions and installed Fledge skills per technology |
 
 ### Keeping project knowledge current
 

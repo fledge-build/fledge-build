@@ -57,14 +57,18 @@ List any third-party services and what they are used for. Include services refer
 Document project-specific patterns you observed: naming conventions, file organization, testing patterns, anything that is consistent across the codebase but would not be obvious to someone new.
 
 ### Stack
-List the technology stack with specific versions where visible. Include:
-- Framework and language
-- Build tools
-- Database and ORM
-- Key libraries
-- Deployment target (if apparent)
+Start with a one to two sentence prose summary of the stack (e.g. "Vue 3 frontend with TypeScript, Hono API server with Drizzle ORM on SQLite").
 
-Then list any installed Fledge technology skills and what they cover.
+Then add a table listing each core technology, its version, and whether a Fledge skill covers it. Check `.claude/skills/` for installed skills. Only include technologies that matter for understanding the project, not every sub-dependency (linters, formatters, and dev tools belong in Conventions).
+
+```markdown
+| Technology   | Version | Fledge skill |
+| ------------ | ------- | ------------ |
+| Vue 3        | 3.5     | @fledge/vue  |
+| Hono         | 4.11    |              |
+```
+
+The Fledge skill column helps the build skill know which technologies have guided support and which rely on general agent knowledge.
 
 ## Step 4: Review with the developer
 
