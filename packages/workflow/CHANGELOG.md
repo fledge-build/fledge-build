@@ -1,5 +1,13 @@
 # @fledge/workflow
 
+## 0.6.2
+
+### Patch Changes
+
+- fadf884: Remove executable script handling in favor of running skill scripts with node. Drop shebang banner from workflow build and makeScriptsExecutable from CLI.
+- Updated dependencies [fadf884]
+  - @fledge/cli@0.9.1
+
 ## 0.6.1
 
 ### Patch Changes
