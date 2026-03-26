@@ -1,5 +1,11 @@
 # @fledge/cli
 
+## 0.12.1
+
+### Patch Changes
+
+- 96b2981: Merge stack and technology skills into a single table in the `project.md` template and init skill guidance.
+
 ## 0.12.0
 
 ### Minor Changes
