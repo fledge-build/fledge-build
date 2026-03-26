@@ -24,6 +24,10 @@ export default defineCommand({
     const brief = readBriefFrontmatter(name)
     validateTransition(brief.status, 'completed')
 
+    if (!brief.summary) {
+      throw new Error('Brief must have a summary before completing. Add a "summary" field to the brief.md frontmatter.')
+    }
+
     const tasks = readTasksFrontmatter(name)
     const incomplete = tasks.tasks.filter(task => !task.done)
     if (incomplete.length > 0) {

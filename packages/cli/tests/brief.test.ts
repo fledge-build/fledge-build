@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { parseFrontmatter } from '../src/frontmatter.ts'
+import { parseFrontmatter, writeFrontmatter } from '../src/frontmatter.ts'
 import { createTempDirectory, readFile, run, writeFile } from './helpers.ts'
 
 let tempDirectory: string
@@ -33,6 +33,13 @@ function setTasks(name: string, tasks: Array<{ name: string, group?: string, don
     return lines
   }), '---', ''].join('\n')
   writeFile(tasksFile(name), content)
+}
+
+function setSummary(name: string, summary: string): void {
+  const content = fs.readFileSync(briefFile(name), 'utf8')
+  const data = parseFrontmatter(content)
+  data.summary = summary
+  fs.writeFileSync(briefFile(name), writeFrontmatter(data, content))
 }
 
 describe('fledge brief', () => {
@@ -152,6 +159,7 @@ describe('fledge brief', () => {
       run(['brief', 'create', 'my-feature'], tempDirectory)
       setTasks('my-feature', [{ name: 'First task', done: true }])
       run(['brief', 'start', 'my-feature'], tempDirectory)
+      setSummary('my-feature', 'Added the first feature')
 
       const result = run(['brief', 'complete', 'my-feature'], tempDirectory)
 
@@ -162,6 +170,18 @@ describe('fledge brief', () => {
       expect(data).toMatchObject({ status: 'completed' })
     })
 
+    it('fails if summary is missing', () => {
+      tempDirectory = createTempDirectory()
+      run(['brief', 'create', 'my-feature'], tempDirectory)
+      setTasks('my-feature', [{ name: 'First task', done: true }])
+      run(['brief', 'start', 'my-feature'], tempDirectory)
+
+      const result = run(['brief', 'complete', 'my-feature'], tempDirectory)
+
+      expect(result.exitCode).toBe(1)
+      expect(result.stderr).toContain('summary')
+    })
+
     it('fails if there are incomplete tasks', () => {
       tempDirectory = createTempDirectory()
       run(['brief', 'create', 'my-feature'], tempDirectory)
@@ -170,6 +190,7 @@ describe('fledge brief', () => {
         { name: 'Incomplete task', done: false },
       ])
       run(['brief', 'start', 'my-feature'], tempDirectory)
+      setSummary('my-feature', 'Some summary')
 
       const result = run(['brief', 'complete', 'my-feature'], tempDirectory)
 
@@ -183,34 +204,6 @@ describe('fledge brief', () => {
       run(['brief', 'create', 'my-feature'], tempDirectory)
 
       const result = run(['brief', 'complete', 'my-feature'], tempDirectory)
-
-      expect(result.exitCode).toBe(1)
-      expect(result.stderr).toContain('Cannot transition')
-    })
-  })
-
-  describe('archive', () => {
-    it('transitions a completed brief to archived', () => {
-      tempDirectory = createTempDirectory()
-      run(['brief', 'create', 'my-feature'], tempDirectory)
-      setTasks('my-feature', [{ name: 'First task', done: true }])
-      run(['brief', 'start', 'my-feature'], tempDirectory)
-      run(['brief', 'complete', 'my-feature'], tempDirectory)
-
-      const result = run(['brief', 'archive', 'my-feature'], tempDirectory)
-
-      expect(result.exitCode).toBe(0)
-      expect(result.stdout).toContain('is now archived')
-
-      const data = parseFrontmatter(readFile(briefFile('my-feature')))
-      expect(data).toMatchObject({ status: 'archived' })
-    })
-
-    it('fails if brief is not in completed state', () => {
-      tempDirectory = createTempDirectory()
-      run(['brief', 'create', 'my-feature'], tempDirectory)
-
-      const result = run(['brief', 'archive', 'my-feature'], tempDirectory)
 
       expect(result.exitCode).toBe(1)
       expect(result.stderr).toContain('Cannot transition')
@@ -257,6 +250,59 @@ describe('fledge brief', () => {
       expect(result.stdout).toContain('active')
     })
 
+    it('filters by status', () => {
+      tempDirectory = createTempDirectory()
+      run(['brief', 'create', 'feature-a'], tempDirectory)
+      run(['brief', 'create', 'feature-b'], tempDirectory)
+      setTasks('feature-b', [{ name: 'A task', done: false }])
+      run(['brief', 'start', 'feature-b'], tempDirectory)
+
+      const result = run(['brief', 'list', '--status', 'draft'], tempDirectory)
+
+      expect(result.exitCode).toBe(0)
+      expect(result.stdout).toContain('feature-a')
+      expect(result.stdout).not.toContain('feature-b')
+    })
+
+    it('shows no briefs found when status filter matches nothing', () => {
+      tempDirectory = createTempDirectory()
+      run(['brief', 'create', 'feature-a'], tempDirectory)
+
+      const result = run(['brief', 'list', '--status', 'completed'], tempDirectory)
+
+      expect(result.exitCode).toBe(0)
+      expect(result.stdout).toContain('No briefs found')
+    })
+
+    it('includes summary for completed briefs', () => {
+      tempDirectory = createTempDirectory()
+      run(['brief', 'create', 'my-feature'], tempDirectory)
+      setTasks('my-feature', [{ name: 'The task', done: true }])
+      run(['brief', 'start', 'my-feature'], tempDirectory)
+      setSummary('my-feature', 'Added versioning to recipes')
+      run(['brief', 'complete', 'my-feature'], tempDirectory)
+
+      const result = run(['brief', 'list'], tempDirectory)
+
+      expect(result.exitCode).toBe(0)
+      expect(result.stdout).toContain('Added versioning to recipes')
+    })
+
+    it('sorts by updated date', () => {
+      tempDirectory = createTempDirectory()
+      run(['brief', 'create', 'feature-a'], tempDirectory)
+      run(['brief', 'create', 'feature-b'], tempDirectory)
+      setTasks('feature-b', [{ name: 'A task', done: false }])
+      run(['brief', 'start', 'feature-b'], tempDirectory)
+
+      const result = run(['brief', 'list'], tempDirectory)
+
+      expect(result.exitCode).toBe(0)
+      const lines = result.stdout.trim().split('\n')
+      expect(lines[0]).toContain('feature-a')
+      expect(lines[1]).toContain('feature-b')
+    })
+
     it('shows message when no briefs exist', () => {
       tempDirectory = createTempDirectory()
       const result = run(['brief', 'list'], tempDirectory)
@@ -282,7 +328,7 @@ describe('fledge brief', () => {
   })
 
   describe('full lifecycle', () => {
-    it('walks a brief through draft -> active -> completed -> archived', () => {
+    it('walks a brief through draft -> active -> completed', () => {
       tempDirectory = createTempDirectory()
 
       run(['brief', 'create', 'my-feature'], tempDirectory)
@@ -292,11 +338,9 @@ describe('fledge brief', () => {
       run(['brief', 'start', 'my-feature'], tempDirectory)
       expect(parseFrontmatter(readFile(briefFile('my-feature')))).toMatchObject({ status: 'active' })
 
+      setSummary('my-feature', 'Implemented the feature with one task')
       run(['brief', 'complete', 'my-feature'], tempDirectory)
       expect(parseFrontmatter(readFile(briefFile('my-feature')))).toMatchObject({ status: 'completed' })
-
-      run(['brief', 'archive', 'my-feature'], tempDirectory)
-      expect(parseFrontmatter(readFile(briefFile('my-feature')))).toMatchObject({ status: 'archived' })
     })
   })
 })

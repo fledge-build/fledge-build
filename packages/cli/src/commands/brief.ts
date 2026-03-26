@@ -1,5 +1,4 @@
 import { defineCommand } from 'citty'
-import archive from './brief/archive.ts'
 import complete from './brief/complete.ts'
 import create from './brief/create.ts'
 import list from './brief/list.ts'
@@ -14,7 +13,6 @@ export default defineCommand({
     description: 'Manage feature briefs',
   },
   subCommands: {
-    archive,
     complete,
     create,
     list,

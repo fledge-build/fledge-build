@@ -78,18 +78,10 @@ fledge brief start recipe-versioning
 
 ### `fledge brief complete <name>`
 
-Transitions a brief from `active` to `completed`. Validates that all tasks are marked as done before allowing the transition.
+Transitions a brief from `active` to `completed`. Validates that all tasks are marked as done and that a summary is present in the brief frontmatter before allowing the transition. The summary serves as a compact record of what was built and why, used as context when creating future briefs.
 
 ```bash
 fledge brief complete recipe-versioning
-```
-
-### `fledge brief archive <name>`
-
-Transitions a brief from `completed` to `archived`.
-
-```bash
-fledge brief archive recipe-versioning
 ```
 
 ### `fledge brief status <name>`
@@ -115,19 +107,24 @@ frontend
 
 ### `fledge brief list`
 
-Lists all briefs with their status and task progress.
+Lists all briefs with their status, task progress, and summary (if present). Sorted by last updated date. Completed briefs include their summary, giving agents context from previous work when creating new briefs.
 
 ```bash
 fledge brief list
+fledge brief list --status completed
 ```
 
 Example output:
 
 ```
-recipe-versioning  active      1/4 tasks
-recipe-sharing     draft       0/2 tasks
-meal-planning      archived    6/6 tasks
+recipe-sharing     draft      0/2 tasks
+recipe-versioning  active     1/4 tasks
+meal-planning      completed  6/6 tasks  Added meal planning with weekly calendar view
 ```
+
+| Option     | Description                                          |
+| ---------- | ---------------------------------------------------- |
+| `--status` | Filter by brief status (`draft`, `active`, `completed`) |
 
 ### `fledge brief validate <name>`
 
@@ -150,15 +147,14 @@ fledge brief schema
 Briefs follow a linear state machine. The CLI enforces valid transitions and runs validation checks at each transition.
 
 ```
-draft  -->  active  -->  completed  -->  archived
+draft  -->  active  -->  completed
 ```
 
-| Transition              | Command                   | Validation                       |
-| ----------------------- | ------------------------- | -------------------------------- |
-| (new) to `draft`        | `fledge brief create`     | Name must not already exist      |
-| `draft` to `active`     | `fledge brief start`      | At least one task must be defined |
-| `active` to `completed` | `fledge brief complete`   | All tasks must be done           |
-| `completed` to `archived` | `fledge brief archive`  | None                             |
+| Transition              | Command                 | Validation                                    |
+| ----------------------- | ----------------------- | --------------------------------------------- |
+| (new) to `draft`        | `fledge brief create`   | Name must not already exist                   |
+| `draft` to `active`     | `fledge brief start`    | At least one task must be defined              |
+| `active` to `completed` | `fledge brief complete` | All tasks must be done, summary must be present |
 
 ## Brief file format
 
@@ -172,10 +168,19 @@ name: recipe-versioning
 status: draft
 created: 2026-03-26
 updated: 2026-03-27
+summary: Added append-only versioning to recipes with full history UI
 ---
 
 Requirements, design decisions, and context go here as freeform markdown.
 ```
+
+| Field     | Type   | Required              | Description                                       |
+| --------- | ------ | --------------------- | ------------------------------------------------- |
+| `name`    | string | yes                   | The brief name (matches directory name)           |
+| `status`  | string | yes                   | One of `draft`, `active`, `completed`             |
+| `created` | date   | yes                   | Creation date (YYYY-MM-DD)                        |
+| `updated` | date   | no                    | Last update date (YYYY-MM-DD)                     |
+| `summary` | string | required for complete | Short summary of what was built, used as context for future briefs |
 
 ### `tasks.md`
 

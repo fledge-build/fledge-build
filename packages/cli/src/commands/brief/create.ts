@@ -30,7 +30,7 @@ export default defineCommand({
 
     fs.writeFileSync(
       getBriefFile(name),
-      writeFrontmatter({ name, status: 'draft', created: date }),
+      writeFrontmatter({ name, status: 'draft', created: date, updated: date }),
     )
 
     fs.writeFileSync(

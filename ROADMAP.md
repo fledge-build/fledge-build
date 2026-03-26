@@ -35,22 +35,22 @@ Brief         <- Produce a feature brief: requirements, design, tasks
 Enrich        <- Connect the brief to project knowledge (data models, conventions, existing patterns)
 Implement     <- Execute tasks, guided by technology skills
 Verify        <- Check completeness against the brief and convention compliance
-Archive       <- Store the completed brief for future reference
+Complete      <- Summarize what was built, mark the brief as completed
 ```
 
 The workflow is fluid. Steps can be revisited: implementation may reveal design gaps, which flow back into the brief. Exploration may happen at any point. The sequence is a default, not a gate.
 
+Completed briefs accumulate as project knowledge. Each completed brief requires a summary that captures what was built and key decisions made. When creating new briefs, the agent reads these summaries for context.
+
 Two systems support the workflow:
 
 ```
-Project knowledge (living, maintained)       Feature briefs (per feature, archived)
+Project knowledge (living, maintained)       Feature briefs (per feature)
 ├── data models                              ├── recipe-versioning/
-├── domain glossary                          │   ├── requirements.md
-├── API conventions                          │   ├── brief.md
-├── architecture decisions                   │   ├── enriched-brief.md
-└── installed skills + conventions           │   └── contract.md
-                                             └── recipe-sharing/
-                                                 └── ...
+├── domain glossary                          │   ├── brief.md
+├── API conventions                          │   └── tasks.md
+├── architecture decisions                   └── recipe-sharing/
+└── installed skills + conventions               └── ...
 ```
 
 ## Package architecture
@@ -140,16 +140,17 @@ Establish the skill model and prove it works.
 
 ### Phase 2: Workflow layer
 
-The feature-driven workflow. Provides the structure for moving from idea to implementation: explore, brief, enrich, implement, verify, archive.
+The feature-driven workflow. Provides the structure for moving from idea to implementation: explore, brief, enrich, implement, verify, complete.
 
 > **Dependency:** The workflow must be designed before initialization (Phase 3) can be implemented, because initialization produces the project knowledge that the workflow consumes.
 
-- [ ] Define the feature brief format (requirements, design, tasks) and enrichment model
-- [ ] Design the workflow commands and how they interact with technology skills
+- [x] Define the feature brief format (requirements, design, tasks) with zod schemas
+- [x] Brief lifecycle CLI commands (create, start, complete, status, list, validate, schema)
+- [x] Completion requires a summary for use as project context in future briefs
+- [ ] Design the workflow skill and how it interacts with technology skills
 - [ ] Build the enrichment step that connects briefs to project knowledge
 - [ ] Customized implementation step that discovers and activates installed technology skills
 - [ ] Verification that checks both brief compliance and convention compliance
-- [ ] Archiving of completed briefs for future reference
 
 ### Phase 3: Project initialization
 
@@ -183,10 +184,10 @@ Testing and review guidance baked into technology skills and the workflow.
 
 ### Phase 6: Interactive onboarding
 
-A skill that guides new engineers through the project interactively. The agent reads the installed technology skills, project knowledge, and archived feature briefs, then runs a conversation adapted to what the engineer already knows.
+A skill that guides new engineers through the project interactively. The agent reads the installed technology skills, project knowledge, and completed feature briefs, then runs a conversation adapted to what the engineer already knows.
 
 - [ ] Onboarding skill with a decision tree for how to run the conversation (what to cover first, how to assess existing knowledge, when to go deeper)
-- [ ] Draws from existing skills, project knowledge, and archived briefs at conversation time
+- [ ] Draws from existing skills, project knowledge, and completed briefs at conversation time
 - [ ] Adapts depth and examples based on the engineer's background
 - [ ] Uses real code from the project for examples rather than abstract illustrations
 
