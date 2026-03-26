@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import { env } from 'node:process'
 
 const FLEDGE_BIN = path.resolve(import.meta.dirname, '../src/fledge-binary.ts')
 
@@ -24,6 +25,7 @@ export function run(args: string[], workingDirectory: string): RunResult {
       cwd: workingDirectory,
       encoding: 'utf8',
       timeout: 10_000,
+      env: { ...env, INIT_CWD: '' },
     })
     return { stdout, stderr: '', exitCode: 0 }
   }

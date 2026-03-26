@@ -14,16 +14,18 @@ The goals of this repository are:
 
 ## How it works
 
-Each skill package under `packages/` ships a single skill. On `postinstall`, the `fledge` binary (provided by `@fledge/cli`) copies the skill directory into the consuming project, namespaced by package name (e.g. `fledge-vue`). A `.gitignore` is written into the installed directory so the files are not committed in the consuming project.
+Each skill package under `packages/` ships one or more skills. On `postinstall`, the `fledge` binary (provided by `@fledge/cli`) copies skill directories into the consuming project, namespaced by package name. A `.gitignore` is written into each installed directory so the files are not committed in the consuming project.
+
+Single-skill packages use a `skill/` directory, multi-skill packages use a `skills/` directory with subdirectories.
 
 ```
 packages/vue/
-  skill/
-    SKILL.md                  <- skill entry point (name, description)
+  skill/                                <- single skill
+    SKILL.md                            <- skill entry point (name, description)
     component-types.md
     composable-principles.md
     ...
-  package.json                <- postinstall: fledge install-skill
+  package.json                          <- postinstall: fledge skills install
 ```
 
 ## Packages
@@ -101,7 +103,7 @@ When writing skill content, prefer decision guidance over rules. Tell the agent 
 Packages are scoped by technology or domain. Everything Vue-related lives in `@fledge/vue`, a backend skill would be its own package, and so on. The practical benefit is selective installation: a project only installs the skills relevant to its stack.
 
 1. Create a new directory under `packages/`
-2. Add a `package.json` with `@fledge/cli` as a dependency and `"postinstall": "fledge install-skill"`
+2. Add a `package.json` with `@fledge/cli` as a dependency and `"postinstall": "fledge skills install"`
 3. Add a `skill/` directory with at minimum a `SKILL.md`
 4. Add a corresponding playground under `playgrounds/` with agent configuration (e.g., `CLAUDE.md` or `AGENTS.md`)
 

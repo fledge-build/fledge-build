@@ -14,7 +14,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "postinstall": "fledge install-skill",
+    "postinstall": "fledge skills install",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --fix"
   },

@@ -12,11 +12,16 @@ pnpm add -D @fledge/cli
 
 ## Commands
 
-### `fledge install-skill [packageDirectory]`
+### `fledge skills install [source]`
 
-Copies the `skill/` directory from a skill package into the consuming project's skills directory, namespaced by package name. A `.gitignore` is written so the installed files are not committed.
+Installs skills from a package into the project's skills directory. Supports two layouts:
 
-Typically called from a skill package's `postinstall` script, not directly:
+- **Single skill**: a `skill/` directory in the package. Installed as `<prefix>` (e.g. `@fledge/vue` becomes `fledge-vue`).
+- **Multiple skills**: a `skills/` directory with subdirectories. Each subdirectory is installed as `<prefix>-<name>` (e.g. `@fledge/workflow/skills/brief` becomes `fledge-workflow-brief`).
+
+The skill name in SKILL.md frontmatter is updated to match the installed directory name. A `.gitignore` is written so the installed files are not committed.
+
+Typically called from a skill package's `postinstall` script:
 
 ```json
 {
@@ -24,14 +29,36 @@ Typically called from a skill package's `postinstall` script, not directly:
     "@fledge/cli": "..."
   },
   "scripts": {
-    "postinstall": "fledge install-skill"
+    "postinstall": "fledge skills install"
   }
 }
 ```
 
 | Option     | Description                                          |
 | ---------- | ---------------------------------------------------- |
+| `--target` | Target directory to install into (defaults to project root) |
 | `--global` | Install to the home directory instead of the project |
+
+### `fledge skills list`
+
+Lists all installed skills with their name, type, and description. Reads SKILL.md frontmatter from each installed skill directory.
+
+```bash
+fledge skills list
+fledge skills list --type technology
+```
+
+Example output:
+
+```
+fledge-vue             technology  Vue conventions
+fledge-workflow-brief  workflow    Brief lifecycle
+```
+
+| Option     | Description                                          |
+| ---------- | ---------------------------------------------------- |
+| `--type`   | Filter by skill type from SKILL.md metadata (e.g. "technology", "workflow") |
+| `--global` | List globally installed skills instead of project-local |
 
 ### `fledge brief create <name>`
 
