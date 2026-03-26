@@ -91,7 +91,7 @@ importers:
   packages/vue:
     dependencies:
       '@fledge/cli':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../cli
     devDependencies:
       '@antfu/eslint-config':
@@ -104,7 +104,7 @@ importers:
   packages/workflow:
     dependencies:
       '@fledge/cli':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../cli
     devDependencies:
       '@antfu/eslint-config':

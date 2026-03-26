@@ -1,6 +1,12 @@
+catalogMode: prefer
+
+cleanupUnusedCatalogs: true
+
+shellEmulator: true
+
+trustPolicy: no-downgrade
 packages:
   - packages/*
-
 catalog:
   '@antfu/eslint-config': 7.7.3
   '@changesets/cli': 2.30.0
@@ -13,11 +19,3 @@ catalog:
   vitest: 4.1.1
   yaml: 2.8.3
   zod: 4.3.6
-
-catalogMode: prefer
-
-cleanupUnusedCatalogs: true
-
-shellEmulator: true
-
-trustPolicy: no-downgrade

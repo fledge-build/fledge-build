@@ -17,8 +17,8 @@
     "postinstall": "fledge skills install",
     "lint": "eslint . --fix"
   },
-  "dependencies": {
-    "@fledge/cli": "workspace:*"
+  "peerDependencies": {
+    "@fledge/cli": "workspace:^"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
