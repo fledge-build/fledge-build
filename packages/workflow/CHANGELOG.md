@@ -1,5 +1,11 @@
 # @fledge/workflow
 
+## 0.6.3
+
+### Patch Changes
+
+- 17ffd7c: Fix brief skill allowed-tools glob to match the installed script path.
+
 ## 0.6.2
 
 ### Patch Changes
