@@ -1,5 +1,16 @@
 # @fledge/vue
 
+## 0.4.0
+
+### Minor Changes
+
+- e028e2c: resolve CLI binary via npx in workflow skills, keep direct dependency for postinstall
+
+### Patch Changes
+
+- Updated dependencies [e028e2c]
+  - @fledge/cli@0.6.0
+
 ## 0.3.0
 
 ### Minor Changes
