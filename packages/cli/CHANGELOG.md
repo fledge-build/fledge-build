@@ -1,5 +1,11 @@
 # @fledge/cli
 
+## 0.12.0
+
+### Minor Changes
+
+- c2e573d: Add `fledge-init` skill that guides codebase exploration and populates `.fledge/project.md` with project knowledge. Includes CLI export entry point and bundled script.
+
 ## 0.11.0
 
 ### Minor Changes
