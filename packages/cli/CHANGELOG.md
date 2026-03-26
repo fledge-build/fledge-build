@@ -1,5 +1,11 @@
 # @fledge/cli
 
+## 0.11.0
+
+### Minor Changes
+
+- 95b912f: Add `fledge init` command to scaffold `.fledge/project.md` with project knowledge template. Rename "implement" to "build" across workflow docs and skills. Update brief skill enrich step to read `project.md` and flag gaps in project knowledge.
+
 ## 0.10.0
 
 ### Minor Changes
