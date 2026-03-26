@@ -160,30 +160,7 @@ export function installSkill({ source, name, targetBase }: InstallSkillOptions):
     fs.writeFileSync(skillFile, writeFrontmatter(data, content))
   }
 
-  makeScriptsExecutable(targetDirectory)
-
   fs.writeFileSync(path.join(targetDirectory, '.gitignore'), '*\n')
-}
-
-/**
- * Recursively finds `.js` files that start with a shebang and makes them executable.
- *
- * @param directory - The directory to search for scripts.
- */
-export function makeScriptsExecutable(directory: string): void {
-  const entries = fs.readdirSync(directory, { withFileTypes: true })
-  for (const entry of entries) {
-    const fullPath = path.join(directory, entry.name)
-    if (entry.isDirectory()) {
-      makeScriptsExecutable(fullPath)
-    }
-    else if (entry.name.endsWith('.js')) {
-      const content = fs.readFileSync(fullPath, 'utf8')
-      if (content.startsWith('#!')) {
-        fs.chmodSync(fullPath, 0o755)
-      }
-    }
-  }
 }
 
 interface InstalledSkill {

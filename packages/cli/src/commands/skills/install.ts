@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { cwd, stdout } from 'node:process'
 import { defineCommand } from 'citty'
-import { detectSkillLayout, getGlobalDirectory, getPackageName, getProjectDirectory, getSkillSources, installSkill, makeScriptsExecutable, SKILLS_DIRECTORY } from '../../skills.ts'
+import { detectSkillLayout, getGlobalDirectory, getPackageName, getProjectDirectory, getSkillSources, installSkill, SKILLS_DIRECTORY } from '../../skills.ts'
 
 export default defineCommand({
   meta: {
@@ -58,7 +58,6 @@ export default defineCommand({
         const targetScripts = path.join(targetBase, SKILLS_DIRECTORY, skill.name, 'scripts')
         fs.mkdirSync(targetScripts, { recursive: true })
         fs.cpSync(distScripts, targetScripts, { recursive: true })
-        makeScriptsExecutable(targetScripts)
       }
 
       stdout.write(`[${packageName}] Installed skill "${skill.name}"\n`)

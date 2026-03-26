@@ -5,20 +5,20 @@ description: >-
   Invoked directly via /fledge-brief, not auto-triggered.
 metadata:
   type: workflow
-allowed-tools: Bash(scripts/brief.js *), Bash(node *)
+allowed-tools: Bash(node scripts/brief.js *)
 ---
 
 ## Available scripts
 
-**Important:** All scripts have a shebang and are executable. Run them directly (e.g. `scripts/brief.js list`), never prefix with `node`. Always pass `--project-dir` pointing to the project root.
+**Important:** Run all scripts with `node` (e.g. `node scripts/brief.js list`). Always pass `--project-dir` pointing to the project root.
 
-- **`scripts/brief.js create <name> --project-dir <path>`** -- Create a new brief with stub files
-- **`scripts/brief.js start <name> --project-dir <path>`** -- Transition a brief from draft to active
-- **`scripts/brief.js complete <name> --project-dir <path>`** -- Transition a brief from active to completed
-- **`scripts/brief.js status <name> --project-dir <path>`** -- Show status and task progress
-- **`scripts/brief.js list [--status <status>] --project-dir <path>`** -- List all briefs with progress and summary
-- **`scripts/brief.js validate <name> --project-dir <path>`** -- Validate brief files against schemas
-- **`scripts/brief.js schema`** -- Output JSON Schema for brief and tasks frontmatter
+- **`node scripts/brief.js create <name> --project-dir <path>`** -- Create a new brief with stub files
+- **`node scripts/brief.js start <name> --project-dir <path>`** -- Transition a brief from draft to active
+- **`node scripts/brief.js complete <name> --project-dir <path>`** -- Transition a brief from active to completed
+- **`node scripts/brief.js status <name> --project-dir <path>`** -- Show status and task progress
+- **`node scripts/brief.js list [--status <status>] --project-dir <path>`** -- List all briefs with progress and summary
+- **`node scripts/brief.js validate <name> --project-dir <path>`** -- Validate brief files against schemas
+- **`node scripts/brief.js schema`** -- Output JSON Schema for brief and tasks frontmatter
 
 ## Step 0: Determine intent
 
@@ -28,7 +28,7 @@ Ask what the user wants to do, or infer from context. Present these options:
 2. **Continue a brief** -- pick up an existing brief. Proceed to Step 4.
 3. **Complete a brief** -- wrap up a finished feature. Proceed to Step 5.
 
-If unclear, run `scripts/brief.js list --project-dir <path>` to show current briefs and ask.
+If unclear, run `node scripts/brief.js list --project-dir <path>` to show current briefs and ask.
 
 ---
 
@@ -36,7 +36,7 @@ If unclear, run `scripts/brief.js list --project-dir <path>` to show current bri
 
 Before writing anything, build an understanding of what exists.
 
-1. Run `scripts/brief.js list --status completed --project-dir <path>` to read summaries of completed features. Note anything relevant to the new feature.
+1. Run `node scripts/brief.js list --status completed --project-dir <path>` to read summaries of completed features. Note anything relevant to the new feature.
 2. Ask the user what they want to build. Keep it conversational, not a form. Aim to understand:
    - What is the user-facing change?
    - Why does it matter?
@@ -51,7 +51,7 @@ Proceed to Step 2.
 
 ## Step 2: Draft the brief
 
-Run `scripts/brief.js create <name> --project-dir <path>` to create the brief directory.
+Run `node scripts/brief.js create <name> --project-dir <path>` to create the brief directory.
 
 Write the brief content into `brief.md`. The frontmatter is managed by the scripts. The markdown body should capture:
 
@@ -87,7 +87,7 @@ tasks:
 
 Order tasks by dependency: tasks that others depend on come first within their group.
 
-After writing tasks, run `scripts/brief.js validate <name> --project-dir <path>` to confirm the brief is valid, then run `scripts/brief.js start <name> --project-dir <path>` to transition to active.
+After writing tasks, run `node scripts/brief.js validate <name> --project-dir <path>` to confirm the brief is valid, then run `node scripts/brief.js start <name> --project-dir <path>` to transition to active.
 
 Present the complete brief and task list to the user for review before starting.
 
@@ -95,22 +95,22 @@ Present the complete brief and task list to the user for review before starting.
 
 ## Step 4: Continue a brief
 
-Run `scripts/brief.js list --project-dir <path>` to show all briefs. If the user does not specify which brief, ask them to pick one.
+Run `node scripts/brief.js list --project-dir <path>` to show all briefs. If the user does not specify which brief, ask them to pick one.
 
-Run `scripts/brief.js status <name> --project-dir <path>` to show progress. Read the brief and tasks files to understand the full context.
+Run `node scripts/brief.js status <name> --project-dir <path>` to show progress. Read the brief and tasks files to understand the full context.
 
 From here, the user may want to:
 - **Discuss a task** -- talk through approach before implementing
 - **Update tasks** -- mark tasks as done, add new tasks, reorder
 - **Revise the brief** -- update scope or design decisions based on what was learned during implementation
 
-When updating task status, modify the `tasks.md` frontmatter directly, then run `scripts/brief.js status <name> --project-dir <path>` to confirm the update.
+When updating task status, modify the `tasks.md` frontmatter directly, then run `node scripts/brief.js status <name> --project-dir <path>` to confirm the update.
 
 ---
 
 ## Step 5: Complete a brief
 
-Run `scripts/brief.js status <name> --project-dir <path>` to verify all tasks are done.
+Run `node scripts/brief.js status <name> --project-dir <path>` to verify all tasks are done.
 
 If there are incomplete tasks, ask the user whether to:
 1. Mark remaining tasks as done (if they were completed outside this conversation)
@@ -121,4 +121,4 @@ Write a summary into the `brief.md` frontmatter `summary` field. The summary sho
 - What was built
 - Key decisions or patterns established that future features should know about
 
-Run `scripts/brief.js complete <name> --project-dir <path>` to transition to completed. The script validates that all tasks are done and the summary is present.
+Run `node scripts/brief.js complete <name> --project-dir <path>` to transition to completed. The script validates that all tasks are done and the summary is present.

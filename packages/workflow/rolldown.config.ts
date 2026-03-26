@@ -9,7 +9,6 @@ export default defineConfig({
     dir: 'dist/scripts',
     format: 'esm',
     entryFileNames: '[name].js',
-    banner: '#!/usr/bin/env node',
   },
   platform: 'node',
 })
