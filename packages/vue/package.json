@@ -1,7 +1,7 @@
 {
   "name": "@fledge/vue",
   "type": "module",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "author": "René Schapka",
   "license": "MIT",
   "files": [
