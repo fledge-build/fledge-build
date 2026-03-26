@@ -5,12 +5,12 @@ description: >-
   Invoked directly via /fledge-brief, not auto-triggered.
 metadata:
   type: workflow
-allowed-tools: Bash(scripts/brief.js *)
+allowed-tools: Bash(scripts/brief.js *), Bash(node *)
 ---
 
 ## Available scripts
 
-Self-contained executable scripts bundled with this skill. All brief commands require `--project-dir` to point to the project root:
+**Important:** All scripts have a shebang and are executable. Run them directly (e.g. `scripts/brief.js list`), never prefix with `node`. Always pass `--project-dir` pointing to the project root.
 
 - **`scripts/brief.js create <name> --project-dir <path>`** -- Create a new brief with stub files
 - **`scripts/brief.js start <name> --project-dir <path>`** -- Transition a brief from draft to active
