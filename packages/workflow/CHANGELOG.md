@@ -1,5 +1,16 @@
 # @fledge/workflow
 
+## 0.6.0
+
+### Minor Changes
+
+- 46dd3ab: Replace global state with explicit BriefContext object passed through all brief functions. Add --project-dir flag to all brief subcommands for overriding the project root, enabling scripts to run from the skill directory while operating on the correct project. Add allowed-tools: Bash(scripts/brief.js \*) to the brief skill frontmatter so agents can execute scripts without permission prompts.
+
+### Patch Changes
+
+- Updated dependencies [46dd3ab]
+  - @fledge/cli@0.9.0
+
 ## 0.5.0
 
 ### Minor Changes

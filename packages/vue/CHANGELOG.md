@@ -1,5 +1,12 @@
 # @fledge/vue
 
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies [46dd3ab]
+  - @fledge/cli@0.9.0
+
 ## 0.4.2
 
 ### Patch Changes
