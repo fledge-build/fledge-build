@@ -2,7 +2,7 @@ import type { BriefFrontmatter, BriefStatus } from './schemas/brief.ts'
 import type { TasksFrontmatter } from './schemas/tasks.ts'
 import fs from 'node:fs'
 import path from 'node:path'
-import { cwd } from 'node:process'
+import { cwd, env } from 'node:process'
 import { parseFrontmatter, writeFrontmatter } from './frontmatter.ts'
 import { briefFrontmatter, briefTransitions } from './schemas/brief.ts'
 import { tasksFrontmatter } from './schemas/tasks.ts'
@@ -10,12 +10,22 @@ import { tasksFrontmatter } from './schemas/tasks.ts'
 const BRIEFS_DIRECTORY = path.join('.fledge', 'briefs')
 
 /**
+ * Returns the project root directory.
+ * Uses the `FLEDGE_PROJECT_DIR` environment variable if set, otherwise falls back to `cwd()`.
+ *
+ * @returns The absolute path to the project root.
+ */
+export function getProjectRoot(): string {
+  return env.FLEDGE_PROJECT_DIR || cwd()
+}
+
+/**
  * Returns the absolute path to the briefs directory for the current project.
  *
- * @returns The absolute path to `.fledge/briefs/` in the current working directory.
+ * @returns The absolute path to `.fledge/briefs/` in the project root.
  */
 export function getBriefsDirectory(): string {
-  return path.join(cwd(), BRIEFS_DIRECTORY)
+  return path.join(getProjectRoot(), BRIEFS_DIRECTORY)
 }
 
 /**
