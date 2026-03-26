@@ -1,5 +1,16 @@
 # @fledge/workflow
 
+## 0.8.0
+
+### Minor Changes
+
+- c2e573d: Add `fledge-init` skill that guides codebase exploration and populates `.fledge/project.md` with project knowledge. Includes CLI export entry point and bundled script.
+
+### Patch Changes
+
+- Updated dependencies [c2e573d]
+  - @fledge/cli@0.12.0
+
 ## 0.7.1
 
 ### Patch Changes
