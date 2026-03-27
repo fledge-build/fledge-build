@@ -102,7 +102,7 @@ Export the props interface so consumers can reference it.
 
 Use reka-ui primitives as the foundation for interactive components. This provides accessible behaviour (keyboard navigation, ARIA attributes, focus management) without building it from scratch.
 
-**Before using any reka-ui primitive, read [reka-ui.md](reka-ui.md).** Do not assume how a primitive works — explore its type definitions first.
+**Before using any reka-ui primitive, read [reka-ui.md](reka-ui.md).** Do not assume how a primitive works — fetch its official documentation first.
 
 For polymorphic components — components that can render as different elements or be composed into other components — use the `Primitive` component and expose `as` and `asChild` props:
 

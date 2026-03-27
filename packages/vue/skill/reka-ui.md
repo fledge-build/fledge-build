@@ -6,13 +6,17 @@ reka-ui is the primitive library for all interactive UI components. It provides 
 
 **Do not assume how a reka-ui primitive works based on general knowledge or patterns from other libraries.**
 
-Before using any reka-ui primitive, locate and read its type definitions using a glob:
+Before using any reka-ui primitive, fetch and read its official documentation:
 
 ```text
-node_modules/reka-ui/**/{index,main}.d.ts
+https://reka-ui.com/docs/components/<component-name>.md
 ```
 
-Check what props and emits the primitive actually exposes — do not guess from the component name alone.
+For example, before using `Select`, fetch `https://reka-ui.com/docs/components/select.md`. For utilities like `Primitive` or `VisuallyHidden`, use `https://reka-ui.com/docs/utilities/<utility-name>.md`.
+
+The full documentation index is available at `https://reka-ui.com/llms.txt`. Fetch this if you need to find the correct URL for a component or guide.
+
+Check what props, emits, and slots the primitive actually exposes. Do not guess from the component name alone.
 
 This matters because applying generic "controlled component" intuition often produces code that appears to work (the UI updates locally) but does not propagate state correctly through the component tree.
 
