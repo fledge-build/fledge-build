@@ -170,12 +170,34 @@ The right split will become clearer as it is built. Key deliverables regardless 
 
 ### Phase 4: Project scaffolding (`@fledge/scaffold`)
 
-Agent-based scaffolding for new projects. Separate package (`@fledge/scaffold`), installed globally so it's available from any directory. Contains the scaffolding skill with conversation structure, project templates, and scripts.
+Agent-based scaffolding for new projects. Filesystem-based stack definitions that can be sourced from anywhere (git repository, local directory, S3, etc.). The agent reads the stack definition and guides the developer through setup interactively.
 
-- [ ] Scaffolding skill that guides the agent through project setup interactively (what are we building, which technologies)
-- [ ] Project templates and scripts bundled with the skill
-- [ ] Scaffolds project structure, generates `package.json`, installs Fledge technology packages
+#### Stack definition anatomy
+
+A stack definition is a directory with a standard structure:
+
+```
+my-stack/
+  FLEDGE-STACK.md           Stack overview, frontmatter with modules and options
+  modules/
+    <module-name>/
+      FLEDGE-MODULE.md      Agent guidance: how to apply this module, dependencies, options
+      templates/            Static file templates for this module
+```
+
+- **`FLEDGE-STACK.md`**: frontmatter describes the stack, its modules, and their relationships. Markdown body provides context for the agent when making setup decisions.
+- **`FLEDGE-MODULE.md`**: frontmatter describes the module (what it provides, its options, dependencies on other modules). Markdown body guides the agent through applying the module.
+- **`templates/`**: static files copied into the project. The agent handles all variants and combinations based on the frontmatter, not through template logic.
+
+The key design principle: **no template engine**. All decisions (which modules to include, how to combine them, what to configure) are made by the agent based on the structured frontmatter and the developer's answers. The agent reads, reasons, and writes. Files in `templates/` are starting points, not interpolated templates.
+
+#### Deliverables
+
+- [ ] Define the stack definition format (FLEDGE-STACK.md and FLEDGE-MODULE.md frontmatter schemas)
+- [ ] Scaffolding skill that reads a stack definition and guides the agent through project setup
+- [ ] Support multiple sources: local directory, git repository, remote URL
 - [ ] Auto-runs project initialization (Phase 3) after scaffolding completes
+- [ ] First stack definition based on the playground project as reference
 
 ### Phase 5: Quality gates
 
