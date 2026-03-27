@@ -1,5 +1,11 @@
 # @fledge/vue
 
+## 0.4.7
+
+### Patch Changes
+
+- 65fea2b: Direct agent to fetch reka-ui official documentation via llms.txt instead of scanning node_modules type definitions.
+
 ## 0.4.6
 
 ### Patch Changes
