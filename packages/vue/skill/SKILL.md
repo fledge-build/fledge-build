@@ -4,6 +4,7 @@ description: >-
   Guide Vue feature development following conventions.
   TRIGGER when: creating or modifying .vue files, composables, data fetching (TanStack Query), form logic (TanStack Form), interactive UI (reka-ui), or styling/design tokens — invoke BEFORE writing any code, not after.
   DO NOT TRIGGER when: only reading or explaining existing Vue code with no changes planned.
+user-invocable: true
 ---
 
 ## Step 0: Triage the task

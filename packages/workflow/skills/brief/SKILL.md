@@ -2,9 +2,10 @@
 name: fledge-brief
 description: >-
   Guide feature brief creation and lifecycle. Plan new features, create or update feature briefs, enrich with project knowledge, or complete a feature.
-  Invoked directly via /fledge-brief, not auto-triggered.
 metadata:
   type: workflow
+disable-model-invocation: true
+user-invocable: true
 allowed-tools: Bash(node *scripts/brief.js*)
 ---
 

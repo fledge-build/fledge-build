@@ -2,9 +2,10 @@
 name: fledge-init
 description: >-
   Initialize a project for the Fledge workflow. Creates project knowledge and populates it by exploring the codebase.
-  Invoked directly via /fledge-init, not auto-triggered.
 metadata:
   type: workflow
+disable-model-invocation: true
+user-invocable: true
 allowed-tools: Bash(node *scripts/init.js*)
 ---
 
