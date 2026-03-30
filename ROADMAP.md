@@ -30,18 +30,81 @@ These principles guide what Fledge builds and how:
 The developer experience, from idea to working code:
 
 ```
+Init          <- Bridge project knowledge (once, re-run to update)
 Brief         <- Capture what to build: requirements, scope, design decisions
 Enrich        <- Connect the brief to project knowledge (data models, APIs, domain concepts)
-Build         <- Plan tasks using technology skills, then execute them
-Verify        <- Check completeness against the brief and convention compliance
-Complete      <- Summarize what was built, mark the brief as completed
+Build         <- Implement the feature vertically, guided by enriched brief and technology skills
 ```
 
 The workflow is fluid. Steps can be revisited: building may reveal design gaps, which flow back into the brief. The sequence is a default, not a gate.
 
-Two skills own the workflow. The **brief skill** drives Brief and Enrich (producing the product-level brief and technical spec). The **build skill** drives Build, Verify, and Complete (breaking work into tasks, executing with technology skills, and closing out). See [docs/workflow.md](docs/workflow.md) for the full lifecycle, state transitions, and skill responsibilities.
+Four skills own the workflow:
+
+- **fledge-init** ideally runs once per project to discover and structure project knowledge (data models, domain glossary, API conventions, architecture decisions). Can also be re-run to update the project knowledge bridge as the project evolves, interactively with the developer when needed.
+- **fledge-brief** captures the product-level intent: requirements, scope, and design decisions. Briefs go through lifecycle stages (draft, ready, active, completed, cancelled).
+- **fledge-enrich** connects the brief to project and technical knowledge. Domain concepts, data models, API conventions, and architecture decisions are layered onto the brief so the agent has full context for building.
+- **fledge-build** implements the feature vertically (full stack) based on the enriched brief, pulling in technology skills for each layer.
+
+See [docs/workflow.md](docs/workflow.md) for the full lifecycle, state transitions, and skill responsibilities.
 
 Completed briefs accumulate as project knowledge. Each completed brief requires a summary that captures what was built and key decisions made. When creating new briefs, the agent reads these summaries for context.
+
+### Greenfield project lifecycle
+
+For new projects, the full lifecycle spans two packages. For existing projects, the lifecycle starts at fledge-init.
+
+```mermaid
+flowchart TB
+    classDef skill fill:#e8f4fd,stroke:#2196f3,stroke-width:2px
+    classDef package fill:#fff,stroke:#333,stroke-width:2px
+    classDef artifact fill:#f5f5f5,stroke:#999,stroke-width:1px
+
+    subgraph scaffold["📦 @fledge/scaffold (global)"]
+        subgraph source["Stack definition (any source)"]
+            ST[FLEDGE-STACK.md]:::artifact
+            MOD[modules / FLEDGE-MODULE.md]:::artifact
+            TPL[templates]:::artifact
+        end
+
+        SS["🔮 fledge-scaffold"]:::skill
+    end
+
+    source -->|"read by"| SS
+    SS -->|"interactive: agent guides developer through decisions"| project["Project created"]:::artifact
+
+    subgraph workflow["📦 @fledge/workflow"]
+        I["🔮 fledge-init"]:::skill
+        B["🔮 fledge-brief"]:::skill
+        E["🔮 fledge-enrich"]:::skill
+        BU["🔮 fledge-build"]:::skill
+        PK[("Project knowledge
+        domain glossary, data models,
+        API conventions, architecture decisions")]:::artifact
+
+        subgraph lifecycle["Brief lifecycle"]
+            draft --> ready --> active --> completed
+            active --> cancelled
+        end
+    end
+
+    project --> I
+    I --> B
+    B -->|"brief (product intent)"| E
+    E -->|"enriched brief"| BU
+
+    I --->|"writes"| PK
+    PK --->|"enriches"| E
+    B ~~~ PK
+
+    subgraph tech["📦 Technology skills"]
+        V["🔮 @fledge/vue"]:::skill
+        More["🔮 @fledge/..."]:::skill
+    end
+
+    BU -->|"pulls in"| tech
+```
+
+### Supporting systems
 
 Two systems support the workflow:
 
@@ -64,8 +127,10 @@ packages/
   cli/                  @fledge/cli         CLI binary, devDependency or global
   workflow/             @fledge/workflow     Multiple workflow skills (project-local)
     skills/
-      brief/            fledge-brief        Feature brief lifecycle (brief + enrich)
-      build/            fledge-build        Task planning, execution, verification, completion
+      init/             fledge-init         Project knowledge bridge (once, re-run to update)
+      brief/            fledge-brief        Feature brief creation and lifecycle
+      enrich/           fledge-enrich       Enrich brief with project and technical knowledge
+      build/            fledge-build        Vertical feature implementation
   scaffold/             @fledge/scaffold    Scaffolding skill (global install)
     skill/
       SKILL.md          fledge-scaffold     Templates, scripts, interactive conversation
@@ -109,7 +174,7 @@ developer or skill
 | Package            | Install context | Purpose                                                 |
 | ------------------ | --------------- | ------------------------------------------------------- |
 | `@fledge/cli`      | Project-local   | CLI binary, all project commands (`init`, `brief`, etc) |
-| `@fledge/workflow`  | Project-local   | Workflow skills (brief, build)                          |
+| `@fledge/workflow` | Project-local   | Workflow skills (init, brief, enrich, build)            |
 | `@fledge/vue`      | Project-local   | Vue technology skill                                    |
 | `@fledge/scaffold` | Global          | Scaffolding skill, runs before a project exists         |
 
@@ -141,9 +206,21 @@ Establish the skill model and prove it works.
 
 ### Phase 2: Workflow layer
 
-The feature-driven workflow. Provides the structure for moving from idea to working code: brief, enrich, build, verify, complete. See [docs/workflow.md](docs/workflow.md) for the full lifecycle design.
+The feature-driven workflow with four skills: init, brief, enrich, build. See [docs/workflow.md](docs/workflow.md) for the full lifecycle design.
 
-> **Dependency:** The workflow must be designed before initialization (Phase 3) can be built, because initialization produces the project knowledge that the workflow consumes.
+#### fledge-init
+
+Project knowledge bridge. Discovers and structures project knowledge so downstream skills can consume it efficiently. Ideally runs once, but can be re-run to update the knowledge bridge as the project evolves (interactive with user input when needed).
+
+- [x] Init CLI command creates `.fledge/project.md` template
+- [x] Init skill explores the codebase and populates project knowledge
+- [ ] Discover and register project knowledge sources (data models, domain glossary, API conventions)
+- [ ] Connect installed technology skills to project context
+- [ ] Establish the project knowledge structure so it can be maintained as the project evolves
+
+#### fledge-brief
+
+Feature brief creation and lifecycle management. Captures product-level intent.
 
 - [x] Define the feature brief format (requirements, design, tasks) with zod schemas
 - [x] Brief lifecycle CLI commands (create, ready, start, complete, cancel, status, list, validate, schema)
@@ -151,24 +228,24 @@ The feature-driven workflow. Provides the structure for moving from idea to work
 - [x] Brief states: draft, ready, active, completed, cancelled
 - [x] Task states: pending, active, completed, skipped
 - [x] Brief anatomy: brief.md (product), spec.md (technical context), tasks.md (tasks)
-- [x] Workflow design: brief skill owns Brief + Enrich, build skill owns Build + Verify + Complete
-- [ ] Build the build skill: task planning with technology skills, execution, verification
-- [ ] Validate workflow through real project usage
+- [ ] Validate brief skill through real project usage
 
-### Phase 3: Project initialization
+#### fledge-enrich
 
-Prepares a project for the Fledge workflow. Likely involves two concerns that may be separate steps or combined:
+Enriches a brief with project and technical knowledge. Layers domain concepts, data models, API conventions, and architecture decisions onto the brief so the agent has full context for building.
 
-- **Mechanical setup** -- which technology skills to install, project structure, initial configuration. This may be a CLI command (`fledge init`), similar to how other tools handle interactive project setup.
-- **Project knowledge discovery** -- understanding the existing codebase: data models, domain concepts, API conventions, existing patterns. This likely needs agent intelligence and may be better served by a skill.
+- [ ] Define what enrichment adds to a brief (domain context, technical constraints, relevant patterns)
+- [ ] Build the enrich skill
+- [ ] Validate enrichment quality through real project usage
 
-The right split will become clearer as it is built. Key deliverables regardless of approach:
+#### fledge-build
 
-- [ ] Discover and register project knowledge sources (data models, domain glossary, API conventions)
-- [ ] Connect installed technology skills to project context
-- [ ] Establish the project knowledge structure so it can be maintained as the project evolves
+Implements features vertically (full stack) based on enriched briefs, pulling in technology skills for each layer.
 
-### Phase 4: Project scaffolding (`@fledge/scaffold`)
+- [ ] Build the build skill: task planning with technology skills, vertical execution
+- [ ] Validate build skill through real project usage
+
+### Phase 3: Project scaffolding (`@fledge/scaffold`)
 
 Agent-based scaffolding for new projects. Filesystem-based stack definitions that can be sourced from anywhere (git repository, local directory, S3, etc.). The agent reads the stack definition and guides the developer through setup interactively.
 
@@ -196,10 +273,10 @@ The key design principle: **no template engine**. All decisions (which modules t
 - [ ] Define the stack definition format (FLEDGE-STACK.md and FLEDGE-MODULE.md frontmatter schemas)
 - [ ] Scaffolding skill that reads a stack definition and guides the agent through project setup
 - [ ] Support multiple sources: local directory, git repository, remote URL
-- [ ] Auto-runs project initialization (Phase 3) after scaffolding completes
+- [ ] Auto-runs fledge-init after scaffolding completes
 - [ ] First stack definition based on the playground project as reference
 
-### Phase 5: Quality gates
+### Phase 4: Quality gates
 
 Testing and review guidance baked into technology skills and the workflow.
 
@@ -207,7 +284,7 @@ Testing and review guidance baked into technology skills and the workflow.
 - [ ] Review guidance: separation of generation and review, multi-pass review patterns
 - [ ] Context management guidance (when to clear context, how to keep agent reasoning sharp across long tasks)
 
-### Phase 6: Interactive onboarding
+### Phase 5: Interactive onboarding
 
 A skill that guides new engineers through the project interactively. The agent reads the installed technology skills, project knowledge, and completed feature briefs, then runs a conversation adapted to what the engineer already knows.
 
@@ -216,7 +293,7 @@ A skill that guides new engineers through the project interactively. The agent r
 - [ ] Adapts depth and examples based on the engineer's background
 - [ ] Uses real code from the project for examples rather than abstract illustrations
 
-### Phase 7: Technology expansion
+### Phase 6: Technology expansion
 
 Additional technology skills following the established design principles.
 
