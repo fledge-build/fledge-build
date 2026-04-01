@@ -6,7 +6,7 @@ metadata:
   type: workflow
 disable-model-invocation: true
 user-invocable: true
-allowed-tools: Bash(node *scripts/init.js*)
+allowed-tools: Bash(node *scripts/init.js*), Read, Edit, Glob, Grep
 ---
 
 ## Purpose

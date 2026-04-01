@@ -6,7 +6,7 @@ metadata:
   type: workflow
 disable-model-invocation: true
 user-invocable: true
-allowed-tools: Bash(node *scripts/brief.js*)
+allowed-tools: Bash(node *scripts/brief.js*), Read, Edit, Glob, Grep
 ---
 
 ## Lifecycle overview
