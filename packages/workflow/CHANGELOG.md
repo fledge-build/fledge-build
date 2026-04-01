@@ -1,5 +1,12 @@
 # @fledge/workflow
 
+## 0.8.2
+
+### Patch Changes
+
+- 48825ca: Use skill frontmatter fields for invocation control instead of description-based trigger guards.
+- 04725b7: Add allowed-tools to skill frontmatter for fluid agent workflows: WebFetch for reka-ui docs in vue, Read/Edit/Glob/Grep for codebase exploration in workflow skills.
+
 ## 0.8.1
 
 ### Patch Changes
